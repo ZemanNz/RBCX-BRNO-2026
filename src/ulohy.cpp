@@ -10,22 +10,51 @@ void zavrit_klepeto(){
 
 void vysun_zhazovadlo(){//musi byt blokujici ... ceka nez dosahne stupne....
     rkServosSetPosition(1,80);
-    while(rkServosGetPosition(1) < 75){
-        delay(10);
-    }
+    delay(200);
 }
 void zasun_zhazovadlo(){
     rkServosSetPosition(1, 0);
-    while(rkServosGetPosition(1) > 5){
-        delay(10);
-    }
+    delay(200);
 }
 
 void srovnani(){ // nejak vyuzit tlacitka a ultrazvuky.....
 
 }
 
+bool cervena(){
+    float r, g, b;
+    if (rkColorSensorGetRGB("front", &r, &g, &b)) {
+        printf("red: %f, green: %f, blue: %f\n", r, g, b);
+        delay(10);
+        if (r > g && r > b && r > 170)
+        {
+            printf("RED\n");
+            rkLedRed(true);
+            return true;
+        }
+        else {
+            return false;
+        }
+    } else {
+        Serial.println("Sensor 'front' not found.");
+        return false;
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Assuming sensor 2 is for left
+bool is_free_right(int threshold) {
+    return rkUltraMeasure(1) > threshold;
+}
+
+bool is_free_front(int threshold) {
+    return rkUltraMeasure(3) > threshold;
+}
+
+bool is_free_left(int threshold) {
+    return rkUltraMeasure(2) > threshold;
+}
 
 void sprint(int distance){
     forward_acc(distance, 60);
@@ -90,5 +119,49 @@ void kulicky(){
 
 }
 void bludiste(){
-
+    forward(300,70);
+    for(int i=0; i< 5; i++){
+        if(is_free_right()){// v pravo je volno
+            turn_on_spot_right(90, 50);
+            delay(10);
+            forward(300,70);
+            delay(10);
+        }
+        else if(is_free_front()){// ve predu je volno
+            forward(300,70);
+            delay(10);
+        }
+        else{ // vlevo
+            turn_on_spot_left(90, 50);
+            if(is_free_front()){
+                srovnani(); 
+                turn_on_spot_right(90, 50); 
+            }
+            else{
+                srovnani();
+            }
+        }
+        delay(100);
+    }
+    while(!cervena()){ 
+        if(is_free_right()){// v pravo je volno
+            turn_on_spot_right(90, 50);
+            forward(300,50);
+        }
+        else if(is_free_front()){// ve predu je volno
+            forward(300,70);
+        }
+        else{ // vlevo
+            turn_on_spot_left(90, 50);
+            if(is_free_front()){
+                srovnani(); 
+                turn_on_spot_right(90, 50); 
+            }
+            else{
+                srovnani();
+            }
+        }
+        delay(100);
+    }
 }
+
