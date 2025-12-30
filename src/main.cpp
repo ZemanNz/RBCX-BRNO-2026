@@ -44,6 +44,9 @@ void configurating(){
     // delay(5000);
     // rkServosSetPosition(4, -43);//uvnitr
 
+    rkServosSetPosition(1, -90);//natahnuti
+    delay(5000);
+    rkServosSetPosition(1, -80);
 }   
 
 enum RobotButton {
