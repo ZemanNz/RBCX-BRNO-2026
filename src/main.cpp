@@ -70,10 +70,8 @@ void setup() {
 }
 
 void loop() {
-    Serial.printf("Ultrazvuk 1: %d mm\n", rkUltraMeasure(1));
-    Serial.printf("Ultrazvuk 2: %d mm\n", rkUltraMeasure(2));
-    Serial.printf("Ultrazvuk 3: %d mm\n", rkUltraMeasure(3));
-    Serial.printf("Ultrazvuk 4: %d mm\n", rkUltraMeasure(4));
+    Serial.print("IR 1: "); Serial.println(rkIrLeft());
+    Serial.print("IR 2: "); Serial.println(rkIrRight());
     Serial.println();
     delay(100);
 
