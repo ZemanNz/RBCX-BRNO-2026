@@ -30,6 +30,7 @@ void loop() {
   } else {
     Serial.println("Sensor 'front' not found.");
   }
+  delay(1000);
+  
 
-  delay(1000); // Wait for a second before the next reading
 }
