@@ -70,8 +70,8 @@ void setup() {
 }
 
 void loop() {
-    Serial.print("IR 1: "); Serial.println(rkIrLeft());
-    Serial.print("IR 2: "); Serial.println(rkIrRight());
+    Serial.print("PRAVY: "); Serial.println(rkIrLeft());// 1 je ten v pravo....
+    Serial.print("LEVY: "); Serial.println(rkIrRight());// kdyz je to nizke tak cerna
     Serial.println();
     delay(100);
 
