@@ -40,10 +40,11 @@ void configurating(){
     rkLedRed(false);
     test_batery();
 
-    rkServosSetPosition(4, 90);
-    delay(5000);
-    rkServosSetPosition(4, -90);
-}
+    // rkServosSetPosition(4, 90);//ven
+    // delay(5000);
+    // rkServosSetPosition(4, -43);//uvnitr
+
+}   
 
 enum RobotButton {
     NONE,
