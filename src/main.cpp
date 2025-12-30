@@ -29,7 +29,7 @@ void configurating(){
     delay(100);
     Wire.setTimeOut(1);
     // Inicializuj senzor
-    rk_laser_init("laser", Wire, lox, 33, 0x31);
+    rk_laser_init("laser", Wire, lox,1, 0x29);
     
     printf("Starting main loop\n");
     //start tlacitko pro kalibraci klepet
@@ -70,8 +70,13 @@ void setup() {
 }
 
 void loop() {
-    int d = rk_laser_measure("laser");
-    Serial.print("Vzdalenost: "); Serial.print(d>=0?String(d):"Chyba"); Serial.println(" mm");
+    Serial.printf("Ultrazvuk 1: %d mm\n", rkUltraMeasure(1));
+    Serial.printf("Ultrazvuk 2: %d mm\n", rkUltraMeasure(2));
+    Serial.printf("Ultrazvuk 3: %d mm\n", rkUltraMeasure(3));
+    Serial.printf("Ultrazvuk 4: %d mm\n", rkUltraMeasure(4));
+    Serial.println();
+    delay(100);
+
 
     rkLedBlue(false);
     rkLedGreen(false);
