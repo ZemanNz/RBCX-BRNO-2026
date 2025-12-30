@@ -39,6 +39,10 @@ void configurating(){
     rkLedYellow(false);
     rkLedRed(false);
     test_batery();
+
+    rkServosSetPosition(4, 90);
+    delay(5000);
+    rkServosSetPosition(4, -90);
 }
 
 enum RobotButton {
@@ -70,10 +74,10 @@ void setup() {
 }
 
 void loop() {
-    Serial.print("PRAVY: "); Serial.println(rkIrLeft());// 1 je ten v pravo....
-    Serial.print("LEVY: "); Serial.println(rkIrRight());// kdyz je to nizke tak cerna
-    Serial.println();
-    delay(100);
+    // Serial.print("PRAVY: "); Serial.println(rkIrLeft());// 1 je ten v pravo....
+    // Serial.print("LEVY: "); Serial.println(rkIrRight());// kdyz je to nizke tak cerna
+    // Serial.println();
+    // delay(100);
 
 
     rkLedBlue(false);
