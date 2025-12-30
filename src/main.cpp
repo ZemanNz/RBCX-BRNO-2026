@@ -1,10 +1,13 @@
 #include "robotka.h"
 #include "ulohy.h"
+#include <Wire.h>
+#include <Adafruit_VL53L0X.h>
 
 byte Bbutton1 = 34;
 byte Bbutton2 = 35;
-Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_1X);
-float r, g, b;
+
+// deklarace instance senzoru
+Adafruit_VL53L0X lox = Adafruit_VL53L0X();
 
 void trap() {
     Serial.println("trap\n");
@@ -19,17 +22,14 @@ void configurating(){
     Serial.begin(115200);
     rkConfig cfg;
     rkSetup(cfg);
-    static const uint8_t TCS_SDA_pin = 21;
-    static const uint8_t TCS_SCL_pin = 22;
-
-
-    pinMode(TCS_SDA_pin, PULLUP);
-    pinMode(TCS_SCL_pin, PULLUP);
-    Wire1.begin(TCS_SDA_pin, TCS_SCL_pin, 100000);
-    Wire1.setTimeOut(1); // from example
-
-    // Initialize the color sensor with a unique name and the I2C bus
-    rkColorSensorInit("front", Wire1, tcs);
+    pinMode(14, PULLUP);
+    pinMode(26, PULLUP);
+    // Spust I2C sbernice
+    Wire.begin(14, 26, 400000);
+    delay(100);
+    Wire.setTimeOut(1);
+    // Inicializuj senzor
+    rk_laser_init("laser", Wire, lox, 33, 0x31);
     
     printf("Starting main loop\n");
     //start tlacitko pro kalibraci klepet
@@ -70,13 +70,8 @@ void setup() {
 }
 
 void loop() {
-    if (rkColorSensorGetRGB("front", &r, &g, &b)) {
-        Serial.print("R: "); Serial.print(r, 3);
-        Serial.print(" G: "); Serial.print(g, 3);
-        Serial.print(" B: "); Serial.println(b, 3);
-    } else {
-        Serial.println("Sensor 'front' not found.");
-    }
+    int d = rk_laser_measure("laser");
+    Serial.print("Vzdalenost: "); Serial.print(d>=0?String(d):"Chyba"); Serial.println(" mm");
 
     rkLedBlue(false);
     rkLedGreen(false);
@@ -150,5 +145,5 @@ void loop() {
         case NONE:
             break;
     }
-    delay(50);
+    delay(100);
 }
