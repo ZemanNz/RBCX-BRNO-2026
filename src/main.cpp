@@ -8,6 +8,7 @@ byte Bbutton2 = 35;
 
 // deklarace instance senzoru
 Adafruit_VL53L0X lox = Adafruit_VL53L0X();
+Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_1X);
 
 void trap() {
     Serial.println("trap\n");
@@ -30,6 +31,18 @@ void configurating(){
     Wire.setTimeOut(1);
     // Inicializuj senzor
     rk_laser_init("laser", Wire, lox,1, 0x29);
+
+    static const uint8_t TCS_SDA_pin = 21;
+    static const uint8_t TCS_SCL_pin = 22;
+
+
+    pinMode(TCS_SDA_pin, PULLUP);
+    pinMode(TCS_SCL_pin, PULLUP);
+    Wire1.begin(TCS_SDA_pin, TCS_SCL_pin, 100000);
+    Wire1.setTimeOut(1); // from example
+
+    // Initialize the color sensor with a unique name and the I2C bus
+    rkColorSensorInit("front", Wire1, tcs);
     
     printf("Starting main loop\n");
     //start tlacitko pro kalibraci klepet
@@ -39,6 +52,8 @@ void configurating(){
     rkLedYellow(false);
     rkLedRed(false);
     test_batery();
+    zavrit_klepeto();
+
 
     // rkServosSetPosition(4, 90);//ven
     // delay(5000);
@@ -94,11 +109,26 @@ void loop() {
             rkLedGreen(true); // Zelená pro výhru
             delay(10000);
             // Kombinace úkolů pro "vyhrej"
-            sprint(2100); 
+            sprint(2400); 
+            srovnej_se_v_levo();
+            turn_on_spot_right(90, 50);
+            delay(100);
+            back_buttons(40);
+            delay(100);
+            forward_acc(od_steny_na_stred_pole, 50);
+            rkBuzzerSet(true);
+            delay(200);
+            rkBuzzerSet(false);
             delay(10000);
             slalom(true); 
             delay(10000);
             bludiste();
+            srovnej_se_v_pravo();
+            turn_on_spot_left(90, 50);
+            delay(100);
+            back_buttons(40);
+            delay(100);
+            forward_acc(od_steny_na_stred_pole, 50);
             delay(10000);
             medved();
             delay(10000);
@@ -113,13 +143,13 @@ void loop() {
 
         case DOWN_KULICKY:
             rkLedBlue(true); // Modrá pro kuličky
-            delay(10000);
+            delay(1000);
             kulicky();
             break;
             
         case RIGHT_BLUDISTE:
             rkLedYellow(true); // Žlutá pro bludiště
-            delay(10000);
+            delay(1000);
             bludiste();
             break;
             
@@ -157,9 +187,6 @@ void loop() {
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
             delay(1000);
             
-            delay(1000);
-            
-
 
 
             break;

@@ -5,6 +5,12 @@
 
 extern Adafruit_TCS34725 tcs;
 
+extern int zadek_od_stredu;
+extern int predek_od_stredu;
+extern int jedno_pole;
+extern int od_steny_na_stred_pole;
+
+
 // Helper functions for maze navigation
 bool is_free_right();
 bool is_free_front();
