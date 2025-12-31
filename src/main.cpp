@@ -136,8 +136,13 @@ void loop() {
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
             //sprint(2000);
-            
-            
+            for(int i=0; i< 35; i++){
+                int d = rkUltraMeasure(4);
+                Serial.print("predni: "); Serial.print(d>=0?String(d):"Chyba"); Serial.println(" mm");
+                int d_u = rkUltraMeasure(3);
+                Serial.print("zadni: "); Serial.print(d_u>=0?String(d_u):"Chyba"); Serial.println(" mm");
+                delay(100);
+            }
             delay(1000);
             break;
             
@@ -146,7 +151,8 @@ void loop() {
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
             delay(1000);
 
-           
+           srovnej_se_v_levo();
+            delay(1000);
             
             
             break;
@@ -157,6 +163,9 @@ void loop() {
             rkLedBlue(true);
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
             delay(1000);
+            srovnej_se_v_pravo();
+            delay(1000);
+            
 
 
 

@@ -17,10 +17,19 @@ void zasun_zhazovadlo(){
     delay(200);
 }
 
-void srovnej_se_v_pravo(){
-    orient_to_wall(true, []() -> uint32_t { return ; },
-                             []() -> uint32_t { return rkUltraMeasure(2); });
+void srovnani(){
+
 }
+
+void srovnej_se_v_pravo(){
+    orient_to_wall(true, []() -> uint32_t { return rk_laser_measure("laser"); },
+                             []() -> uint32_t { return rkUltraMeasure(2); }, -23);
+}
+
+void srovnej_se_v_levo(){
+    orient_to_wall(false, []() -> uint32_t { return rkUltraMeasure(4); },
+                             []() -> uint32_t { return rkUltraMeasure(3); },-10);
+}   
 
 bool cervena(){
     float r, g, b;

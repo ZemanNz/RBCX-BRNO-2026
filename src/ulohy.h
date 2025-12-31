@@ -10,6 +10,9 @@ bool is_free_right(int threshold = 250);
 bool is_free_front(int threshold = 250);
 bool is_free_left(int threshold = 250);
 
+void srovnej_se_v_pravo();
+void srovnej_se_v_levo();
+
 bool cervena();
 
 void sprint(int distance);
