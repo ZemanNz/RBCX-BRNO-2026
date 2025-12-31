@@ -613,10 +613,14 @@ void back_buttons(float speed);
  * First senzor je ten, kterej je prvni ve smeru jizdy robota.
  * 
  * Nejspise je potreba donastavovat podle aktualniho robota.
+ * 
+ * okolik_je zadni dal ---> treba -23 pokud je bliz zdi
+ * 
+ * pokud je bool automatic_distance_of_wall tru tak se ignoruje distance of wall
  */
-void wall_following(float distance_to_drive, float speed, float distance_of_wall, bool is_wall_on_right,
+void wall_following(float distance_to_drive, float speed, bool automatic_distance_of_wall ,float distance_of_wall, bool is_wall_on_right,
                    std::function<uint32_t()> first_sensor, 
-                   std::function<uint32_t()> second_sensor);
+                   std::function<uint32_t()> second_sensor, int o_kolik_je_dal_zadni);
 
 
 /**
@@ -635,6 +639,7 @@ void wall_following(float distance_to_drive, float speed, float distance_of_wall
  * Funkce nezvládne větší úhly ---- > pokud kolem neni zadna jina stena pouzit orient_to_wall_any_price() !!!!
  * 
  * Funkce first_sensor a second_sensor vrací hodnoty v mm ze senzorů vzdálenosti --- ultrazvuky nebo laserový s.
+ * 
  */
 void orient_to_wall(bool button_or_right, std::function<uint32_t()> first_sensor, 
                    std::function<uint32_t()> second_sensor, int o_kolik_je_dal_zadni = 0, float speed = 10);

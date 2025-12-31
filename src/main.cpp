@@ -151,7 +151,10 @@ void loop() {
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
             delay(1000);
 
-           srovnej_se_v_levo();
+            wall_following(1300 ,30.0f, true,  100.0f, true,
+                   []() -> uint32_t { return rkUltraMeasure(2); },
+                   []() -> uint32_t { return rkUltraMeasure(1); }, -23); 
+        
             delay(1000);
             
             
@@ -163,7 +166,7 @@ void loop() {
             rkLedBlue(true);
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
             delay(1000);
-            srovnej_se_v_pravo();
+            
             delay(1000);
             
 
