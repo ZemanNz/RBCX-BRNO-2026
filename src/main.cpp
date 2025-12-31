@@ -139,9 +139,9 @@ void loop() {
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
             //sprint(2000);
-            turn_on_spot_left(90,30);
+            radius_left(150,90, 40);
             delay(1000);
-            turn_on_spot_right(90,30);
+            radius_right(150,90, 40);
             delay(1000);
             break;
             
@@ -151,7 +151,7 @@ void loop() {
             delay(1000);
 
             //forward(1500,60);
-            turn_on_spot_left(180,60);
+            radius_left(200,180, 60);
             
             break;
             
@@ -163,7 +163,7 @@ void loop() {
             delay(1000);
 
             //forward_acc(1500,60);
-            turn_on_spot_right(180,60);
+            radius_right(200,180, 60);
             
             break;
         
