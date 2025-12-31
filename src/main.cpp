@@ -16,7 +16,7 @@ void trap() {
 }
 void test_batery(){
     printf("batery percent: %u\n", rkBatteryPercent());
-    printf("batery percent: %u\n", rkBatteryVoltageMv()/1000);
+    printf("batery voltage: %u\n", rkBatteryVoltageMv()/1000);
 }
 void configurating(){
     Serial.begin(115200);
@@ -44,9 +44,9 @@ void configurating(){
     // delay(5000);
     // rkServosSetPosition(4, -43);//uvnitr
 
-    rkServosSetPosition(1, -90);//natahnuti
-    delay(5000);
-    rkServosSetPosition(1, -80);
+    // rkServosSetPosition(1, -90);//natahnuti
+    // delay(5000);
+    // rkServosSetPosition(1, -55);
 }   
 
 enum RobotButton {
@@ -126,22 +126,33 @@ void loop() {
         case LEFT_SLALOM:
             rkLedRed(true);
             rkLedYellow(true); // Oranžová pro slalom
-            delay(10000);
-            slalom(false);
+            delay(1000);
+            //slalom(false);
+            turn_on_spot_left(90,40);
+            delay(1000);
+            turn_on_spot_right(90,50);
+            delay(1000);
             break;
             
         case ON_SPRINT:
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
-            delay(10000);
-            sprint(2000);
+            delay(1000);
+            //sprint(2000);
+            turn_on_spot_left(90,30);
+            delay(1000);
+            turn_on_spot_right(90,30);
+            delay(1000);
             break;
             
         case BUTTON1_KOMBINACE1:
             rkLedGreen(true);
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
-            delay(10000);
-            // Zde může být akce pro kombinaci 1
+            delay(1000);
+
+            //forward(1500,60);
+            turn_on_spot_left(180,60);
+            
             break;
             
         case BUTTON2_KOMBINACE2:
@@ -149,8 +160,11 @@ void loop() {
             rkLedGreen(true);
             rkLedBlue(true);
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
-            delay(10000);
-            // Zde může být akce pro kombinaci 2
+            delay(1000);
+
+            //forward_acc(1500,60);
+            turn_on_spot_right(180,60);
+            
             break;
         
         case NONE:
