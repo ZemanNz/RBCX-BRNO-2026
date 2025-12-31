@@ -6,12 +6,17 @@
 extern Adafruit_TCS34725 tcs;
 
 // Helper functions for maze navigation
-bool is_free_right(int threshold = 250);
-bool is_free_front(int threshold = 250);
-bool is_free_left(int threshold = 250);
+bool is_free_right();
+bool is_free_front();
+bool is_free_left();
 
 void srovnej_se_v_pravo();
 void srovnej_se_v_levo();
+void zavrit_klepeto();
+void otevrit_klepeto();
+void vysun_zhazovadlo();
+void zasun_zhazovadlo();
+void srovnani();
 
 bool cervena();
 
