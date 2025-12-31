@@ -67,49 +67,56 @@ bool is_free_left(int threshold) {
 }
 
 void sprint(int distance){
-    forward_acc(distance, 60);
+    forward_acc(distance/2, 60);
+    srovnej_se_v_pravo();
+    forward_acc(distance/2, 60);
 }
 void slalom(bool right){
-    forward(300,60);
+    forward_acc(270,60);
     turn_on_spot_right(90, 50);
-    forward(150,60);
-    radius_left(90, 180, 60);
-    radius_right(90, 184, 60);
-    back_buttons(30);
-    forward(84,30);
+    forward_acc(140,60);
+    delay(1000);
+    radius_left(70, 180, 60);
+    delay(1000);
+    radius_right(70, 180, 60);
+    delay(1000);
+    back_buttons(60);
+    forward_acc(45,30);
+    turn_on_spot_right(90, 50);
+    back_buttons(40);
+    forward_acc(45,30);
     turn_on_spot_left(90, 50);
-    back_buttons(30);
-    forward(84,30);
-    turn_on_spot_left(90, 50);
-    forward(300,50);
+    srovnej_se_v_levo();
+    forward_acc(300,50);
 }
 void medved(){
     otevrit_klepeto();
-    delay(10);
+    delay(100);
+    forward(450,70);
+    delay(100);
+    radius_right(70, 90, 50);
+    delay(100);
     forward(450,70);
     delay(10);
-    radius_right(75, 90, 70);
-    delay(10);
-    forward(450,70);
+    srovnej_se_v_pravo();
     delay(10);
     back_buttons(45);
     delay(10);
     zavrit_klepeto();
     delay(10);
-    forward(89,30);
-    delay(10);
+    forward_acc(45,50);
+    delay(100);
     turn_on_spot_right(90,50);
     delay(10);
     back_buttons(30);
     delay(10);
-    forward(89,30);
-    delay(10);
-    forward(300,70);
+    forward_acc(345,70);
     delay(10);
     turn_on_spot_right(90,50);
     delay(10);
-    forward(300,70);
-
+    forward_acc(300,70);
+    srovnej_se_v_pravo();
+    delay(10);
 }
 void kulicky(){
     forward(90,30);

@@ -107,7 +107,7 @@ void loop() {
 
         case OFF_MEDVED:
             rkLedRed(true); // Červená pro medvěda
-            delay(10000);
+            delay(1000);
             medved();
             break;
 
@@ -127,7 +127,7 @@ void loop() {
             rkLedRed(true);
             rkLedYellow(true); // Oranžová pro slalom
             delay(1000);
-            //slalom(false);
+            slalom(true);
             
             break;
             
@@ -135,15 +135,7 @@ void loop() {
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
-            //sprint(2000);
-            for(int i=0; i< 35; i++){
-                int d = rkUltraMeasure(4);
-                Serial.print("predni: "); Serial.print(d>=0?String(d):"Chyba"); Serial.println(" mm");
-                int d_u = rkUltraMeasure(3);
-                Serial.print("zadni: "); Serial.print(d_u>=0?String(d_u):"Chyba"); Serial.println(" mm");
-                delay(100);
-            }
-            delay(1000);
+            sprint(2400);
             break;
             
         case BUTTON1_KOMBINACE1:
@@ -151,9 +143,7 @@ void loop() {
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
             delay(1000);
 
-            wall_following(1300 ,30.0f, true,  100.0f, true,
-                   []() -> uint32_t { return rkUltraMeasure(2); },
-                   []() -> uint32_t { return rkUltraMeasure(1); }, -23); 
+        
         
             delay(1000);
             
