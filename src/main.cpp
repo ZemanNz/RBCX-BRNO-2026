@@ -128,10 +128,7 @@ void loop() {
             rkLedYellow(true); // Oranžová pro slalom
             delay(1000);
             //slalom(false);
-            turn_on_spot_left(90,40);
-            delay(1000);
-            turn_on_spot_right(90,50);
-            delay(1000);
+            
             break;
             
         case ON_SPRINT:
@@ -139,9 +136,8 @@ void loop() {
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
             //sprint(2000);
-            radius_left(150,90, 40);
-            delay(1000);
-            radius_right(150,90, 40);
+            
+            
             delay(1000);
             break;
             
@@ -150,8 +146,8 @@ void loop() {
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
             delay(1000);
 
-            //forward(1500,60);
-            radius_left(200,180, 60);
+           
+            
             
             break;
             
@@ -162,9 +158,8 @@ void loop() {
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
             delay(1000);
 
-            //forward_acc(1500,60);
-            radius_right(200,180, 60);
-            
+
+
             break;
         
         case NONE:

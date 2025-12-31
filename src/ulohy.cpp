@@ -17,8 +17,9 @@ void zasun_zhazovadlo(){
     delay(200);
 }
 
-void srovnani(){ // nejak vyuzit tlacitka a ultrazvuky.....
-
+void srovnej_se_v_pravo(){
+    orient_to_wall(true, []() -> uint32_t { return ; },
+                             []() -> uint32_t { return rkUltraMeasure(2); });
 }
 
 bool cervena(){
