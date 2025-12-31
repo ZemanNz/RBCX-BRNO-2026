@@ -137,7 +137,7 @@ void loop() {
 
         case OFF_MEDVED:
             rkLedRed(true); // Červená pro medvěda
-            delay(1000);
+            delay(10000);
             medved();
             break;
 
