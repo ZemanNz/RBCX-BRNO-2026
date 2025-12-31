@@ -25,6 +25,12 @@ void zasun_zhazovadlo(){
     delay(200);
 }
 
+uint16_t levy_ir(){
+    return rkIrRight();
+}
+uint16_t pravy_ir(){
+    return rkIrLeft();
+}
 void srovnani(){
 
 }
@@ -237,3 +243,60 @@ void bludiste(){
     }
 }
 
+void srovnej_na_caru() {
+    Serial.println("Srovnávám se na čáru (sekvenčně)...");
+
+    // NASTAVENÍ
+    int rychlost = 10;       // Požadovaná rychlost otáčení
+    int prah_cerne = 1000;     // Pod tímto číslem je černá (uprav dle kalibrace)
+    unsigned long start_time = millis(); // Časovač pro timeout
+
+    // 1. Spustíme otáčení DOLEVA
+    // Levý motor couvá (-), pravý jede dopředu (+)
+    rkMotorsSetSpeed(-rychlost, rychlost);
+
+    // KROK A: Čekáme, až LEVÝ senzor UVIDÍ černou čáru
+    // (Pokud už na ní stojí, tento cyklus se přeskočí nebo proběhne hned)
+    while (levy_ir() > prah_cerne) {
+        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
+        Serial.print("IR levý: "); Serial.println(rkIrRight());
+        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+        delay(30);
+        // Stále se točíme...
+    }
+
+    Serial.println("Levý senzor vidí čáru.");
+
+    // KROK B: Čekáme, až LEVÝ senzor PŘEJEDE čáru (uvidí zase bílou)
+    // Tím zajistíme, že čára je teď vpravo od levého senzoru
+    while (levy_ir() < prah_cerne) {
+        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
+        Serial.print("IR levý: "); Serial.println(rkIrRight());
+        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+        delay(30);
+        // Stále se točíme...
+    }
+
+    Serial.println("Levý senzor přejel čáru (je na bílé).");
+
+    // KROK C: Pokračujeme v točení, dokud PRAVÝ senzor nenarazí na okraj čáry
+    while (pravy_ir() > prah_cerne + 500) {
+        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
+        Serial.print("IR levý: "); Serial.println(rkIrRight());
+        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+        delay(30);
+        // Stále se točíme...
+    }
+
+    // HOTOVO: Pravý senzor narazil na čáru.
+    // Teď by měla být čára mezi senzory (levý je na bílé, pravý na hraně černé).
+    rkMotorsSetSpeed(0, 0); 
+    Serial.println("Srovnáno! Zastavuji.");
+
+    // while(true){
+    //     delay(1000);
+    //     Serial.print("IR levý: "); Serial.println(rkIrRight());
+    //     Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+
+    // }
+}
