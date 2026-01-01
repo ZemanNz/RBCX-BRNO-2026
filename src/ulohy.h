@@ -23,7 +23,10 @@ void otevrit_klepeto();
 void vysun_zhazovadlo();
 void zasun_zhazovadlo();
 void srovnani();
+
 void srovnej_na_caru();
+
+void sledovani_cary();
 
 bool cervena();
 

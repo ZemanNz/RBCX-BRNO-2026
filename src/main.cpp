@@ -165,7 +165,13 @@ void loop() {
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
-            sprint(2400);
+            //sprint(2400);
+            while(true){
+                delay(1000);
+                Serial.print("IR levý: "); Serial.println(rkIrRight());
+                Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+
+            }
             break;
             
         case BUTTON1_KOMBINACE1:
@@ -173,49 +179,7 @@ void loop() {
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
             delay(1000);
 
-            while (rkUltraMeasure(1) > 100){
-                // Pro debugování necháme tisk hodnot
-                uint16_t pravy_senzor = rkIrLeft(); // Podle komentářů v kódu je rkIrLeft() pravý senzor
-                uint16_t levy_senzor = rkIrRight(); // a rkIrRight() levý
-                Serial.print("PRAVY: "); Serial.println(pravy_senzor);
-                Serial.print("LEVY: "); Serial.println(levy_senzor);
-                Serial.println();
-                delay(100);
-
-                Serial.print("Ultrazvuk: ");
-                Serial.println(rkUltraMeasure(1));
-
-
-
-                // Výpočet chyby pro P-regulátor
-                // Kladná chyba = robot je příliš vlevo (pravý senzor na čáře), je třeba zatočit doprava.
-                // Záporná chyba = robot je příliš vpravo (levý senzor na čáře), je třeba zatočit doleva.
-                float chyba = pravy_senzor - levy_senzor;
-
-                // Konstanta P regulátoru - bude potřeba ji vyladit!
-                // Začínáme s malou hodnotou. Zvyšujte ji, pokud robot reaguje příliš pomalu.
-                // Snižujte ji, pokud robot kmitá ze strany na stranu.
-                float Kp = 0.01;
-
-                int zakladni_rychlost = 40; // Základní rychlost (%)
-
-                // Výpočet úpravy řízení
-                int uprava_rizeni = Kp * chyba;
-
-                // Výpočet rychlosti pro každý motor
-                int rychlost_levy_motor = zakladni_rychlost + uprava_rizeni;
-                int rychlost_pravy_motor = zakladni_rychlost - uprava_rizeni;
-
-                // Omezení rychlosti na platný rozsah (-100 až 100)
-                rychlost_levy_motor = constrain(rychlost_levy_motor, -100, 100);
-                rychlost_pravy_motor = constrain(rychlost_pravy_motor, -100, 100);
-
-                // Nastavení rychlosti motorů
-                rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
-
-                delay(20); // Krátká pauza pro stabilizaci a aby se nezahltil koprocesor
-            }
-            rkMotorsSetSpeed(0, 0);
+            sledovani_cary();
         
             delay(1000);
             

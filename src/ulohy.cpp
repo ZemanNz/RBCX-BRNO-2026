@@ -243,6 +243,32 @@ void bludiste(){
     }
 }
 
+void sledovani_cary() {
+    while (rkUltraMeasure(1) > 100){
+        // Použijeme pomocné funkce, které správně mapují senzory
+        uint16_t pravy_senzor = pravy_ir(); 
+        uint16_t levy_senzor = levy_ir();
+
+        // Pro debugování můžeme hodnoty tisknout
+        Serial.print("PRAVY: "); Serial.println(pravy_senzor);
+        Serial.print("LEVY: "); Serial.println(levy_senzor);
+        Serial.println();
+
+        int zakladni_rychlost = 30; // Základní rychlost (%)
+
+        int rychlost_levy_motor = map(levy_senzor, 0, 3200, 0, 50);
+        int rychlost_pravy_motor = map(pravy_senzor, 0, 3200, 0, 50);
+
+
+        // Nastavení rychlosti motorů
+        rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
+
+        delay(10); // Krátká pauza pro stabilizaci
+    }
+    // Po ukončení smyčky (překážka je blízko) zastavíme motory
+    rkMotorsSetSpeed(0, 0);
+}
+
 void srovnej_na_caru() {
     Serial.println("Srovnávám se na čáru (sekvenčně)...");
 
