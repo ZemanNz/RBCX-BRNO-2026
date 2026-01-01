@@ -175,8 +175,9 @@ void slalom(bool right){
     forward_acc(150,60);
     turn_on_spot_right(50, 50);
     srovnej_na_caru();
-    byte a = 0;
-    byte casovac = 300;
+    int a = 0;
+    byte b= 0;
+    int casovac = 300;
     while (true){
         uint16_t pravy_senzor = pravy_ir(); 
         uint16_t levy_senzor = levy_ir();
@@ -199,7 +200,21 @@ void slalom(bool right){
             a = 0;
             casovac = 15;
         }
-        a++;
+        a++;///tohle ve v2 nebude
+        if (pravy_senzor > 3700 && levy_senzor > 3700){
+            b++;
+            Serial.println(b);
+            if(b > 15){
+                rkMotorsSetSpeed(0, 0);
+                srovnej_se_v_levo();
+                forward_acc(50,60);
+                delay(100);
+                b=0;
+            }
+        }
+        else{
+            b = 0;
+        }//posem --- mozna nahradit necim kdyby stratil caru
     }
     rkMotorsSetSpeed(0, 0);
     delay(100);
