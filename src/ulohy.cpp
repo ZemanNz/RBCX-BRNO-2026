@@ -65,6 +65,92 @@ bool cervena(){
     }
 }
 
+void sledovani_cary() {
+    while (rkUltraMeasure(1) > 100){
+        // Použijeme pomocné funkce, které správně mapují senzory
+        uint16_t pravy_senzor = pravy_ir(); 
+        uint16_t levy_senzor = levy_ir();
+
+        // Pro debugování můžeme hodnoty tisknout
+        Serial.print("PRAVY: "); Serial.println(pravy_senzor);
+        Serial.print("LEVY: "); Serial.println(levy_senzor);
+        Serial.println();
+
+        int zakladni_rychlost = 30; // Základní rychlost (%)
+
+        int rychlost_levy_motor = map(levy_senzor, 0, 3200, 0, 50);
+        int rychlost_pravy_motor = map(pravy_senzor, 0, 3200, 0, 50);
+
+
+        // Nastavení rychlosti motorů
+        rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
+
+        delay(10); // Krátká pauza pro stabilizaci
+    }
+    // Po ukončení smyčky (překážka je blízko) zastavíme motory
+    rkMotorsSetSpeed(0, 0);
+}
+
+void srovnej_na_caru() {
+    Serial.println("Srovnávám se na čáru (sekvenčně)...");
+
+    // NASTAVENÍ
+    int rychlost = 10;       // Požadovaná rychlost otáčení
+    int prah_cerne = 1000;     // Pod tímto číslem je černá (uprav dle kalibrace)
+    unsigned long start_time = millis(); // Časovač pro timeout
+
+    // 1. Spustíme otáčení DOLEVA
+    // Levý motor couvá (-), pravý jede dopředu (+)
+    rkMotorsSetSpeed(-rychlost, rychlost);
+
+    // KROK A: Čekáme, až LEVÝ senzor UVIDÍ černou čáru
+    // (Pokud už na ní stojí, tento cyklus se přeskočí nebo proběhne hned)
+    while (levy_ir() > prah_cerne) {
+        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
+        Serial.print("IR levý: "); Serial.println(rkIrRight());
+        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+        delay(30);
+        // Stále se točíme...
+    }
+
+    Serial.println("Levý senzor vidí čáru.");
+
+    // KROK B: Čekáme, až LEVÝ senzor PŘEJEDE čáru (uvidí zase bílou)
+    // Tím zajistíme, že čára je teď vpravo od levého senzoru
+    while (levy_ir() < prah_cerne) {
+        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
+        Serial.print("IR levý: "); Serial.println(rkIrRight());
+        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+        delay(30);
+        // Stále se točíme...
+    }
+
+    Serial.println("Levý senzor přejel čáru (je na bílé).");
+
+    // KROK C: Pokračujeme v točení, dokud PRAVÝ senzor nenarazí na okraj čáry
+    while (pravy_ir() > prah_cerne + 500) {
+        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
+        Serial.print("IR levý: "); Serial.println(rkIrRight());
+        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+        delay(30);
+        // Stále se točíme...
+    }
+
+    // HOTOVO: Pravý senzor narazil na čáru.
+    // Teď by měla být čára mezi senzory (levý je na bílé, pravý na hraně černé).
+    rkMotorsSetSpeed(0, 0); 
+    Serial.println("Srovnáno! Zastavuji.");
+
+    // while(true){
+    //     delay(1000);
+    //     Serial.print("IR levý: "); Serial.println(rkIrRight());
+    //     Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+
+    // }
+}
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Assuming sensor 2 is for left
@@ -86,22 +172,51 @@ void sprint(int distance){
     forward_acc(distance/2, 60);
 }
 void slalom(bool right){
-    forward_acc(270,60);
-    turn_on_spot_right(90, 50);
-    forward_acc(140,60);
-    delay(1000);
-    radius_left(70, 180, 60);
-    delay(1000);
-    radius_right(70, 180, 60);
-    delay(1000);
-    back_buttons(60);
-    forward_acc(od_steny_na_stred_pole,30);
-    turn_on_spot_right(90, 50);
-    back_buttons(40);
-    forward_acc(od_steny_na_stred_pole,30);
-    turn_on_spot_left(90, 50);
+    forward_acc(100,60);
+    turn_on_spot_right(40, 50);
+    srovnej_na_caru();
+    byte a = 0;
+    while (true){
+        uint16_t pravy_senzor = pravy_ir(); 
+        uint16_t levy_senzor = levy_ir();
+
+        Serial.print("PRAVY: "); Serial.println(pravy_senzor);
+        Serial.print("LEVY: "); Serial.println(levy_senzor);
+        Serial.println();
+
+        int zakladni_rychlost = 30; // Základní rychlost (%)
+
+        int rychlost_levy_motor = map(levy_senzor, 0, 3200, 0, zakladni_rychlost);
+        int rychlost_pravy_motor = map(pravy_senzor, 0, 3200, 0, zakladni_rychlost);
+
+        rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
+        delay(10); // Krátká pauza pro stabilizaci
+        if(a > 15){
+            if(!cervena()){
+                break;
+            }
+            a = 0;
+        }
+        a++;
+    }
+    rkMotorsSetSpeed(0, 0);
+    delay(100);
     srovnej_se_v_levo();
-    forward_acc(jedno_pole,50);
+    delay(100);
+    back_buttons(40);
+    delay(100);
+    forward_acc(od_steny_na_stred_pole , 50);
+    turn_on_spot_right(90, 50);
+    delay(100);
+    back_buttons(40);
+    delay(100);
+    turn_on_spot_left(90, 50);
+    delay(100);
+    forward_acc(jedno_pole, 50);
+    delay(100);
+    srovnej_se_v_levo();
+    delay(100);
+    
 }
 void medved(){
     otevrit_klepeto();
@@ -243,86 +358,4 @@ void bludiste(){
     }
 }
 
-void sledovani_cary() {
-    while (rkUltraMeasure(1) > 100){
-        // Použijeme pomocné funkce, které správně mapují senzory
-        uint16_t pravy_senzor = pravy_ir(); 
-        uint16_t levy_senzor = levy_ir();
 
-        // Pro debugování můžeme hodnoty tisknout
-        Serial.print("PRAVY: "); Serial.println(pravy_senzor);
-        Serial.print("LEVY: "); Serial.println(levy_senzor);
-        Serial.println();
-
-        int zakladni_rychlost = 30; // Základní rychlost (%)
-
-        int rychlost_levy_motor = map(levy_senzor, 0, 3200, 0, 50);
-        int rychlost_pravy_motor = map(pravy_senzor, 0, 3200, 0, 50);
-
-
-        // Nastavení rychlosti motorů
-        rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
-
-        delay(10); // Krátká pauza pro stabilizaci
-    }
-    // Po ukončení smyčky (překážka je blízko) zastavíme motory
-    rkMotorsSetSpeed(0, 0);
-}
-
-void srovnej_na_caru() {
-    Serial.println("Srovnávám se na čáru (sekvenčně)...");
-
-    // NASTAVENÍ
-    int rychlost = 10;       // Požadovaná rychlost otáčení
-    int prah_cerne = 1000;     // Pod tímto číslem je černá (uprav dle kalibrace)
-    unsigned long start_time = millis(); // Časovač pro timeout
-
-    // 1. Spustíme otáčení DOLEVA
-    // Levý motor couvá (-), pravý jede dopředu (+)
-    rkMotorsSetSpeed(-rychlost, rychlost);
-
-    // KROK A: Čekáme, až LEVÝ senzor UVIDÍ černou čáru
-    // (Pokud už na ní stojí, tento cyklus se přeskočí nebo proběhne hned)
-    while (levy_ir() > prah_cerne) {
-        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
-        Serial.print("IR levý: "); Serial.println(rkIrRight());
-        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
-        delay(30);
-        // Stále se točíme...
-    }
-
-    Serial.println("Levý senzor vidí čáru.");
-
-    // KROK B: Čekáme, až LEVÝ senzor PŘEJEDE čáru (uvidí zase bílou)
-    // Tím zajistíme, že čára je teď vpravo od levého senzoru
-    while (levy_ir() < prah_cerne) {
-        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
-        Serial.print("IR levý: "); Serial.println(rkIrRight());
-        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
-        delay(30);
-        // Stále se točíme...
-    }
-
-    Serial.println("Levý senzor přejel čáru (je na bílé).");
-
-    // KROK C: Pokračujeme v točení, dokud PRAVÝ senzor nenarazí na okraj čáry
-    while (pravy_ir() > prah_cerne + 500) {
-        if (millis() - start_time > 100000) { rkMotorsSetSpeed(0,0); return; } // Timeout
-        Serial.print("IR levý: "); Serial.println(rkIrRight());
-        Serial.print("IR pravý: "); Serial.println(rkIrLeft());
-        delay(30);
-        // Stále se točíme...
-    }
-
-    // HOTOVO: Pravý senzor narazil na čáru.
-    // Teď by měla být čára mezi senzory (levý je na bílé, pravý na hraně černé).
-    rkMotorsSetSpeed(0, 0); 
-    Serial.println("Srovnáno! Zastavuji.");
-
-    // while(true){
-    //     delay(1000);
-    //     Serial.print("IR levý: "); Serial.println(rkIrRight());
-    //     Serial.print("IR pravý: "); Serial.println(rkIrLeft());
-
-    // }
-}
