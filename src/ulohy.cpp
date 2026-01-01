@@ -221,6 +221,21 @@ void sprint_m_d(){
 
     // Po skončení smyčky zastavíme
     rkMotorsSetSpeed(0, 0);
+
+    srovnej_se_v_levo();
+    delay(100);
+    turn_on_spot_right(90, 50);
+    delay(100);
+    back_buttons(40);
+    forward_acc(od_steny_na_stred_pole, 50);
+    delay(100);
+    turn_on_spot_right(90, 50);
+    delay(100);
+    back_buttons(40);
+    delay(100);
+    forward_acc(od_steny_na_stred_pole, 50);
+    delay(100);
+    turn_on_spot_left(90, 50);
 }
 void sprint_cara(){
     forward_acc(150,60);

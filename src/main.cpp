@@ -110,12 +110,6 @@ void loop() {
             delay(10000);
             // Kombinace úkolů pro "vyhrej"
             sprint_m_d(); 
-            srovnej_se_v_levo();
-            turn_on_spot_right(90, 50);
-            delay(100);
-            back_buttons(40);
-            delay(100);
-            forward_acc(od_steny_na_stred_pole, 50);
             rkBuzzerSet(true);
             delay(200);
             rkBuzzerSet(false);
