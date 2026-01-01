@@ -166,7 +166,8 @@ bool is_free_left() {
     return rkUltraMeasure(4) > 200;
 }
 
-void sprint(){
+void sprint_m_d(){
+    
     // Na začátku změříme vzdálenost k oběma stěnám
     int first_distance_left = rkUltraMeasure(4);
     int first_distance_right = rk_laser_measure("laser");
@@ -221,6 +222,54 @@ void sprint(){
     // Po skončení smyčky zastavíme
     rkMotorsSetSpeed(0, 0);
 }
+void sprint_cara(){
+    forward_acc(150,60);
+    turn_on_spot_right(50, 50);
+    srovnej_na_caru();
+    int a = 0;
+    int casovac = 100;
+    while (true){
+        uint16_t pravy_senzor = pravy_ir(); 
+        uint16_t levy_senzor = levy_ir();
+
+        Serial.print("PRAVY: "); Serial.println(pravy_senzor);
+        Serial.print("LEVY: "); Serial.println(levy_senzor);
+        Serial.println();
+
+        int zakladni_rychlost = 45; // Základní rychlost (%)
+
+        int rychlost_levy_motor = map(levy_senzor, 0, 3800, 0, zakladni_rychlost);
+        int rychlost_pravy_motor = map(pravy_senzor, 0, 3800, 0, zakladni_rychlost);
+
+        rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
+        delay(10); // Krátká pauza pro stabilizaci
+        if(a > casovac){
+            if(cervena()){
+                break;
+            }
+            a = 0;
+            casovac = 15;
+        }
+        a++;
+    }
+
+    rkMotorsSetSpeed(0, 0);
+
+    srovnej_se_v_levo();
+    delay(100);
+    turn_on_spot_right(90, 50);
+    delay(100);
+    back_buttons(40);
+    forward_acc(od_steny_na_stred_pole, 50);
+    delay(100);
+    turn_on_spot_right(90, 50);
+    delay(100);
+    back_buttons(40);
+    delay(100);
+    forward_acc(od_steny_na_stred_pole, 50);
+    delay(100);
+    turn_on_spot_left(90, 50);
+}
 void slalom(bool right){
     forward_acc(150,60);
     turn_on_spot_right(50, 50);
@@ -250,8 +299,8 @@ void slalom(bool right){
             a = 0;
             casovac = 15;
         }
-        a++;///tohle ve v2 nebude
-        if (pravy_senzor > 3700 && levy_senzor > 3700){
+        a++;
+        if (pravy_senzor > 3700 && levy_senzor > 3700){///tohle ve v2 nebude
             b++;
             Serial.println(b);
             if(b > 15){

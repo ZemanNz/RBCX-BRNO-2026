@@ -109,7 +109,7 @@ void loop() {
             rkLedGreen(true); // Zelená pro výhru
             delay(10000);
             // Kombinace úkolů pro "vyhrej"
-            sprint(2400); 
+            sprint_m_d(); 
             srovnej_se_v_levo();
             turn_on_spot_right(90, 50);
             delay(100);
@@ -165,7 +165,7 @@ void loop() {
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
-            sprint(2400);
+            sprint_cara();
             // while(true){
             //     delay(1000);
             //     Serial.print("IR levý: "); Serial.println(rkIrRight());

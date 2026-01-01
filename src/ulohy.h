@@ -30,7 +30,8 @@ void sledovani_cary();
 
 bool cervena();
 
-void sprint();
+void sprint_m_d();
+void sprint_cara();
 void slalom(bool right);
 void medved();
 void kulicky();
