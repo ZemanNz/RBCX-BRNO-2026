@@ -166,7 +166,7 @@ bool is_free_left() {
     return rkUltraMeasure(4) > 200;
 }
 
-void sprint(int distance){
+void sprint(){
     // Na začátku změříme vzdálenost k oběma stěnám
     int first_distance_left = rkUltraMeasure(4);
     int first_distance_right = rk_laser_measure("laser");
