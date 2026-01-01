@@ -165,13 +165,13 @@ void loop() {
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
-            //sprint(2400);
-            while(true){
-                delay(1000);
-                Serial.print("IR levý: "); Serial.println(rkIrRight());
-                Serial.print("IR pravý: "); Serial.println(rkIrLeft());
+            sprint(2400);
+            // while(true){
+            //     delay(1000);
+            //     Serial.print("IR levý: "); Serial.println(rkIrRight());
+            //     Serial.print("IR pravý: "); Serial.println(rkIrLeft());
 
-            }
+            // }
             break;
             
         case BUTTON1_KOMBINACE1:

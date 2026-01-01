@@ -167,9 +167,59 @@ bool is_free_left() {
 }
 
 void sprint(int distance){
-    forward_acc(distance/2, 60);
-    srovnej_se_v_pravo();
-    forward_acc(distance/2, 60);
+    // Na začátku změříme vzdálenost k oběma stěnám
+    int first_distance_left = rkUltraMeasure(4);
+    int first_distance_right = rk_laser_measure("laser");
+
+    // Nastavení P-regulátoru a rychlosti
+    const int base_speed = 60; // Základní rychlost
+    const float Kp = 0.5;      // Proporční konstanta (laditelná hodnota)
+
+    int rychlost_levy_motor = base_speed;
+    int rychlost_pravy_motor = base_speed;
+
+
+    // Smyčka běží, dokud je před námi volno
+    while(rkUltraMeasure(1) > (od_steny_na_stred_pole + 20)){ // + 20 kvuli setrvacnosti
+        // Aktuální měření
+        int current_distance_left = rkUltraMeasure(4);
+        int current_distance_right = rk_laser_measure("laser");
+
+        if(current_distance_right < 200 && current_distance_right> 10 && (abs(current_distance_right - first_distance_right) < abs(current_distance_left - first_distance_left))){
+            // Výpočet chyby
+            int error_right = current_distance_right - first_distance_right;
+
+            // Výpočet korekce
+            int correction = Kp * error_right;
+
+            // Úprava rychlosti motorů
+            rychlost_levy_motor = base_speed + correction;
+            rychlost_pravy_motor = base_speed - correction;
+        }
+        else if(current_distance_left < 200 && current_distance_left > 10){
+            // Výpočet chyby
+            int error_left = current_distance_left - first_distance_left;
+
+            // Výpočet korekce
+            int correction = Kp * error_left;
+            // Úprava rychlosti motorů
+            rychlost_levy_motor = base_speed - correction;
+            rychlost_pravy_motor = base_speed + correction;
+        }
+        else{
+            rychlost_levy_motor = base_speed;
+            rychlost_pravy_motor = base_speed;
+        }
+
+        // Odeslání příkazu motorům
+        rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
+
+        // Malá pauza pro plynulost
+        delay(20);
+    }
+
+    // Po skončení smyčky zastavíme
+    rkMotorsSetSpeed(0, 0);
 }
 void slalom(bool right){
     forward_acc(150,60);
