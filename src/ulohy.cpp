@@ -172,10 +172,11 @@ void sprint(int distance){
     forward_acc(distance/2, 60);
 }
 void slalom(bool right){
-    forward_acc(100,60);
-    turn_on_spot_right(40, 50);
+    forward_acc(150,60);
+    turn_on_spot_right(50, 50);
     srovnej_na_caru();
     byte a = 0;
+    byte casovac = 300;
     while (true){
         uint16_t pravy_senzor = pravy_ir(); 
         uint16_t levy_senzor = levy_ir();
@@ -184,18 +185,19 @@ void slalom(bool right){
         Serial.print("LEVY: "); Serial.println(levy_senzor);
         Serial.println();
 
-        int zakladni_rychlost = 30; // Základní rychlost (%)
+        int zakladni_rychlost = 25; // Základní rychlost (%)
 
-        int rychlost_levy_motor = map(levy_senzor, 0, 3200, 0, zakladni_rychlost);
-        int rychlost_pravy_motor = map(pravy_senzor, 0, 3200, 0, zakladni_rychlost);
+        int rychlost_levy_motor = map(levy_senzor, 0, 3800, 0, zakladni_rychlost);
+        int rychlost_pravy_motor = map(pravy_senzor, 0, 3800, 0, zakladni_rychlost);
 
         rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
         delay(10); // Krátká pauza pro stabilizaci
-        if(a > 15){
-            if(!cervena()){
+        if(a > casovac){
+            if(cervena()){
                 break;
             }
             a = 0;
+            casovac = 15;
         }
         a++;
     }
@@ -210,6 +212,7 @@ void slalom(bool right){
     delay(100);
     back_buttons(40);
     delay(100);
+    forward_acc(od_steny_na_stred_pole , 50);
     turn_on_spot_left(90, 50);
     delay(100);
     forward_acc(jedno_pole, 50);

@@ -179,7 +179,13 @@ void loop() {
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
             delay(1000);
 
-            sledovani_cary();
+            while(true){
+                delay(1000);
+
+                bool a = cervena();
+                
+
+            }
         
             delay(1000);
             
