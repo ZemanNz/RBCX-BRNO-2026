@@ -154,6 +154,11 @@ void srovnej_na_caru() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Assuming sensor 2 is for left
+
+bool is_double_free_right(){
+    return rk_laser_measure("laser") > 500;
+}
+
 bool is_free_right() {
     return rk_laser_measure("laser") > 200;
 }
@@ -405,7 +410,24 @@ void kulicky(){
 void bludiste(){
     forward_acc(jedno_pole,40);
     for(int i=0; i< 5; i++){
-        if(is_free_right()){// v pravo je volno
+        if(is_double_free_right()){
+            if(is_free_left()){
+                turn_on_spot_right(90, 50);
+                delay(100);
+                forward_acc(2 * jedno_pole, 40);
+                delay(100);
+            }
+            else{
+                srovnej_se_v_levo();
+                turn_on_spot_right(90, 50);
+                delay(100);
+                back_buttons(40);
+                delay(100);
+                forward_acc(od_steny_na_stred_pole + 2 * jedno_pole, 40); // 345
+                delay(100);
+            }
+        }
+        else if(is_free_right()){// v pravo je volno
             if(is_free_left()){
                 turn_on_spot_right(90, 50);
                 delay(100);
@@ -449,7 +471,24 @@ void bludiste(){
         delay(200);
         rkBuzzerSet(false);
         delay(100);
-        if(is_free_right()){// v pravo je volno
+        if(is_double_free_right()){
+            if(is_free_left()){
+                turn_on_spot_right(90, 50);
+                delay(100);
+                forward_acc(2 * jedno_pole, 40);
+                delay(100);
+            }
+            else{
+                srovnej_se_v_levo();
+                turn_on_spot_right(90, 50);
+                delay(100);
+                back_buttons(40);
+                delay(100);
+                forward_acc(od_steny_na_stred_pole + 2 * jedno_pole, 40); // 345
+                delay(100);
+            }
+        }
+        else if(is_free_right()){// v pravo je volno
             if(is_free_left()){
                 turn_on_spot_right(90, 50);
                 delay(100);
