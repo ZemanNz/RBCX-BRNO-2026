@@ -24,6 +24,21 @@ void vysun_zhazovadlo();
 void zasun_zhazovadlo();
 void srovnani();
 
+void packa_dolu_uplne();
+
+void packa_ven();
+
+void packa_dovnitr();
+
+void packa_nahoru();
+
+void packa_dolu();
+
+void zhod_kulicku();
+
+
+
+
 void srovnej_na_caru();
 
 void sledovani_cary();

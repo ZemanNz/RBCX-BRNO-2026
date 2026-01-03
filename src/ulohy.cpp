@@ -25,6 +25,41 @@ void zasun_zhazovadlo(){
     delay(200);
 }
 
+void packa_dolu_uplne(){
+    rkServosSetPosition(1, -50);
+}
+
+void packa_ven(){
+    rkServosSetPosition(2, 90);
+}
+
+void packa_dovnitr(){
+    rkServosSetPosition(2, 0);
+}
+
+void packa_nahoru(){
+    rkServosSetPosition(1, 70);
+}
+
+void packa_dolu(){
+    rkServosSetPosition(1, -20); // -50
+}
+
+void zhod_kulicku(){
+    packa_dolu();
+    delay(500);
+    for(int i = 0;i < 80 ;i++){
+        rkServosSetPosition(2, i);
+        rkServosSetPosition(1, i);
+        delay(100);
+    }
+    delay(1000);
+    packa_nahoru();
+    delay(500);
+    packa_dovnitr();
+    delay(500);
+}
+
 uint16_t levy_ir(){
     return rkIrRight();
 }
@@ -493,6 +528,7 @@ void bludiste(){
                 turn_on_spot_right(90, 50);
                 delay(100);
                 forward_acc(jedno_pole,40);
+
                 delay(100);
             }
             else{

@@ -3,8 +3,10 @@
 #include <Wire.h>
 #include <Adafruit_VL53L0X.h>
 
+
 byte Bbutton1 = 34;
 byte Bbutton2 = 35;
+
 
 // deklarace instance senzoru
 Adafruit_VL53L0X lox = Adafruit_VL53L0X();
@@ -88,6 +90,7 @@ RobotButton getPressed() {
     return NONE;
 }
 
+
 void setup() {
     configurating();
 }
@@ -159,13 +162,22 @@ void loop() {
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
-            sprint_cara();
+            //sprint_cara();
             // while(true){
             //     delay(1000);
             //     Serial.print("IR levý: "); Serial.println(rkIrRight());
             //     Serial.print("IR pravý: "); Serial.println(rkIrLeft());
 
             // }
+
+
+            zhod_kulicku();
+
+
+           
+
+
+
             break;
             
         case BUTTON1_KOMBINACE1:
