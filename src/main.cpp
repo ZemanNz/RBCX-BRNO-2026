@@ -110,14 +110,14 @@ void loop() {
     switch(getPressed()) {
         case UP_VYHREJ:
             rkLedGreen(true); // Zelená pro výhru
-            delay(10000);
-            // Kombinace úkolů pro "vyhrej"
-            sprint_m_d(); 
-            rkBuzzerSet(true);
-            delay(200);
-            rkBuzzerSet(false);
-            delay(10000);
-            slalom(true); 
+            // delay(10000);
+            // // Kombinace úkolů pro "vyhrej"
+            // sprint_m_d(); 
+            // rkBuzzerSet(true);
+            // delay(200);
+            // rkBuzzerSet(false);
+            // delay(10000);
+            // slalom(true); 
             delay(10000);
             bludiste();
             srovnej_se_v_pravo();
@@ -162,21 +162,13 @@ void loop() {
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
-            //sprint_cara();
+            sprint_m_d();
             // while(true){
             //     delay(1000);
             //     Serial.print("IR levý: "); Serial.println(rkIrRight());
             //     Serial.print("IR pravý: "); Serial.println(rkIrLeft());
 
             // }
-
-
-            zhod_kulicku();
-
-
-           
-
-
 
             break;
             
@@ -188,7 +180,7 @@ void loop() {
             while(true){
                 delay(1000);
 
-                bool a = cervena();
+                cervena();
                 
 
             }

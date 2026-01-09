@@ -15,13 +15,13 @@ void otevrit_klepeto(){
 void zavrit_klepeto(){
     rkServosSetPosition(4, -41);
 }
-
+/// @brief ////////////////////////////////////////////////////////////////
 void vysun_zhazovadlo(){//musi byt blokujici ... ceka nez dosahne stupne....
-    rkServosSetPosition(1,-90);
+    rkServosSetPosition(2,-60);
     delay(200);
 }
 void zasun_zhazovadlo(){
-    rkServosSetPosition(1, -55);
+    rkServosSetPosition(2, 40);
     delay(200);
 }
 
@@ -45,21 +45,35 @@ void packa_dolu(){
     rkServosSetPosition(1, -20); // -50
 }
 
-void zhod_kulicku(){
-    packa_dolu();
-    delay(500);
-    for(int i = 0;i < 80 ;i++){
-        rkServosSetPosition(2, i);
-        rkServosSetPosition(1, i);
-        delay(100);
-    }
-    delay(1000);
-    packa_nahoru();
-    delay(500);
-    packa_dovnitr();
-    delay(500);
-}
 
+
+void zhod_kulicku(){
+    zasun_zhazovadlo();
+    delay(400);
+    rkServosSetPosition(1, 60);
+    delay(400);
+
+    int o =  20;
+
+    for(int i = 0;i > -80 ; i-=5){
+        rkServosSetPosition(2, i);
+        if(i < -20){
+            rkServosSetPosition(1, o);
+        }
+        delay(50);
+       o-= 3;
+    }
+    rkServosSetPosition(1, -65);
+
+    delay(500);
+
+    zasun_zhazovadlo();
+    delay(400);
+    rkServosSetPosition(1, 60);
+    delay(400);
+}
+/// @brief /////////////////////////////////////////////////////////////////////
+/// @return 
 uint16_t levy_ir(){
     return rkIrRight();
 }
@@ -420,32 +434,33 @@ void medved(){
     delay(10);
 }
 void kulicky(){
-    int cekani = 1500;
-    forward_acc(30,30);
-    vysun_zhazovadlo();
-    delay(cekani);
-    zasun_zhazovadlo();
+    zhod_kulicku();
     forward_acc(jedno_pole,50);
-    vysun_zhazovadlo();
-    delay(cekani);
-    zasun_zhazovadlo();
+    zhod_kulicku();
     forward_acc(jedno_pole,50);
-    vysun_zhazovadlo();
-    delay(cekani);
-    zasun_zhazovadlo();
+    zhod_kulicku();
     backward(od_steny_na_stred_pole, 30);
     turn_on_spot_left(90, 50);
     srovnej_se_v_pravo();
     delay(100);
     back_buttons(od_steny_na_stred_pole);
+    forward_acc(od_steny_na_stred_pole,50);
+    turn_on_spot_left(90, 50);
     delay(100);
-    forward_acc(od_steny_na_stred_pole + jedno_pole, 50);
+    back_buttons(od_steny_na_stred_pole);
+    delay(100);
+    forward_acc(od_steny_na_stred_pole,50);
+    turn_on_spot_right(90, 50);
+    delay(100);
+
+    forward_acc(jedno_pole, 50);
 
 }
 void bludiste(){
     forward_acc(jedno_pole,40);
     for(int i=0; i< 5; i++){
         if(is_double_free_right()){
+            i++;
             if(is_free_left()){
                 turn_on_spot_right(90, 50);
                 delay(100);
