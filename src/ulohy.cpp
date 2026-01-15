@@ -8,7 +8,6 @@ int od_steny_na_stred_pole = jedno_pole/2 - zadek_od_stredu; // 150 - 105 = 45 m
 
 
 
-
 void otevrit_klepeto(){
     rkServosSetPosition(4, 88);
 }
@@ -36,8 +35,10 @@ void srovnani(){
 }
 
 void srovnej_se_v_pravo(){
-    orient_to_wall(true, []() -> uint32_t { return rk_laser_measure("laser"); },
-                             []() -> uint32_t { return rkUltraMeasure(2); }, -23);
+    orient_to_wall(true,
+                   []() -> uint32_t { return rk_laser_measure("front"); },
+                   []() -> uint32_t { return rk_laser_measure("back"); },
+                   0);
 }
 
 void srovnej_se_v_levo(){
@@ -150,12 +151,11 @@ void srovnej_na_caru() {
 }
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Assuming sensor 2 is for left
 bool is_free_right() {
-    return rk_laser_measure("laser") > 200;
+    return rk_laser_measure("front") > 200;
 }
 
 bool is_free_front() {
@@ -170,7 +170,7 @@ void sprint_m_d(){
     
     // Na začátku změříme vzdálenost k oběma stěnám
     int first_distance_left = rkUltraMeasure(4);
-    int first_distance_right = rk_laser_measure("laser");
+    int first_distance_right = rk_laser_measure("front");
 
     // Nastavení P-regulátoru a rychlosti
     const int base_speed = 60; // Základní rychlost
@@ -184,7 +184,7 @@ void sprint_m_d(){
     while(rkUltraMeasure(1) > (od_steny_na_stred_pole + 20)){ // + 20 kvuli setrvacnosti
         // Aktuální měření
         int current_distance_left = rkUltraMeasure(4);
-        int current_distance_right = rk_laser_measure("laser");
+        int current_distance_right = rk_laser_measure("front");
 
         if(current_distance_right < 200 && current_distance_right> 10 && (abs(current_distance_right - first_distance_right) < abs(current_distance_left - first_distance_left))){
             // Výpočet chyby
@@ -345,10 +345,6 @@ void slalom(bool right){
     turn_on_spot_left(90, 50);
     delay(100);
     forward_acc(jedno_pole, 50);
-    delay(100);
-    srovnej_se_v_levo();
-    delay(100);
-    
 }
 void medved(){
     otevrit_klepeto();
@@ -400,13 +396,12 @@ void kulicky(){
     back_buttons(od_steny_na_stred_pole);
     delay(100);
     forward_acc(od_steny_na_stred_pole + jedno_pole, 50);
-
 }
 void bludiste(){
     forward_acc(jedno_pole,40);
     for(int i=0; i< 5; i++){
         if(is_free_right()){// v pravo je volno
-            if(is_free_left()){
+            if(is_free_left()){ 
                 turn_on_spot_right(90, 50);
                 delay(100);
                 forward_acc(jedno_pole,40);
@@ -432,7 +427,7 @@ void bludiste(){
             turn_on_spot_left(90, 50);
             delay(100);
             forward_acc(jedno_pole,40);
-            delay(100);             
+            delay(100);
         }
         else{
             turn_on_spot_left(180, 50);
@@ -476,7 +471,7 @@ void bludiste(){
             turn_on_spot_left(90, 50);
             delay(100);
             forward_acc(jedno_pole,40);
-            delay(100);             
+            delay(100);
         }
         else{
             turn_on_spot_left(180, 50);
@@ -489,5 +484,3 @@ void bludiste(){
         delay(200);
     }
 }
-
-
