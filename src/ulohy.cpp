@@ -10,10 +10,10 @@ int od_steny_na_stred_pole = jedno_pole/2 - zadek_od_stredu; // 150 - 105 = 45 m
 
 
 void otevrit_klepeto(){
-    rkServosSetPosition(4, 88);
+    rkServosSetPosition(1, 88);
 }
 void zavrit_klepeto(){
-    rkServosSetPosition(4, -41);
+    rkServosSetPosition(1, -35);
 }
 /// @brief ////////////////////////////////////////////////////////////////
 void vysun_zhazovadlo(){//musi byt blokujici ... ceka nez dosahne stupne....
@@ -85,18 +85,18 @@ void srovnani(){
 }
 
 void srovnej_se_v_pravo(){
-    orient_to_wall(true, []() -> uint32_t { return rk_laser_measure("laser"); },
-                             []() -> uint32_t { return rkUltraMeasure(2); }, -23);
+    orient_to_wall(true, []() -> uint32_t { return rk_laser_measure("front"); },
+                             []() -> uint32_t { return rk_laser_measure("back"); }, -0);
 }
 
 void srovnej_se_v_levo(){
-    orient_to_wall(false, []() -> uint32_t { return rkUltraMeasure(4); },
-                             []() -> uint32_t { return rkUltraMeasure(3); },-10);
+    orient_to_wall(false, []() -> uint32_t { return rkUltraMeasure(1); },
+                             []() -> uint32_t { return rkUltraMeasure(2); },0);
 }   
 
 bool cervena(){
     float r, g, b;
-    if (rkColorSensorGetRGB("front", &r, &g, &b)) {
+    if (rkColorSensorGetRGB("main", &r, &g, &b)) {
         printf("red: %f, green: %f, blue: %f\n", r, g, b);
         delay(10);
         if (r > g && r > b && r > 130)
@@ -205,11 +205,11 @@ void srovnej_na_caru() {
 // Assuming sensor 2 is for left
 
 bool is_double_free_right(){
-    return rk_laser_measure("laser") > 500;
+    return rk_laser_measure("front") > 500;
 }
 
 bool is_free_right() {
-    return rk_laser_measure("laser") > 200;
+    return rk_laser_measure("front") > 200;
 }
 
 bool is_free_front() {

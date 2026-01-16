@@ -6,10 +6,14 @@
 
 byte Bbutton1 = 34;
 byte Bbutton2 = 35;
+byte PIN_XSHUT_1 = 27;
+byte PIN_XSHUT_2 = 25;
+ 
 
 
 // deklarace instance senzoru
-Adafruit_VL53L0X lox = Adafruit_VL53L0X();
+Adafruit_VL53L0X lox1 = Adafruit_VL53L0X();
+Adafruit_VL53L0X lox2 = Adafruit_VL53L0X();
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_1X);
 
 void trap() {
@@ -27,12 +31,19 @@ void configurating(){
     rkSetup(cfg);
     pinMode(14, PULLUP);
     pinMode(26, PULLUP);
+
+    // 1. HARD RESET VŠECH SENZORŮ
+    // Všechny vypneme, aby nerušily I2C sběrnici
+    pinMode(PIN_XSHUT_1, OUTPUT); digitalWrite(PIN_XSHUT_1, LOW);
+    pinMode(PIN_XSHUT_2, OUTPUT); digitalWrite(PIN_XSHUT_2, LOW);
+    
     // Spust I2C sbernice
-    Wire.begin(14, 26, 400000);
+    Wire1.begin(14, 26, 100000);
     delay(100);
-    Wire.setTimeOut(1);
+    Wire1.setTimeOut(1);
     // Inicializuj senzor
-    rk_laser_init("laser", Wire, lox,1, 0x29);
+    // Initialize the color sensor with a unique name and the I2C bus
+    rkColorSensorInit("main", Wire1, tcs);
 
     static const uint8_t TCS_SDA_pin = 21;
     static const uint8_t TCS_SCL_pin = 22;
@@ -40,30 +51,23 @@ void configurating(){
 
     pinMode(TCS_SDA_pin, PULLUP);
     pinMode(TCS_SCL_pin, PULLUP);
-    Wire1.begin(TCS_SDA_pin, TCS_SCL_pin, 100000);
-    Wire1.setTimeOut(1); // from example
+    Wire.begin(TCS_SDA_pin, TCS_SCL_pin, 100000);
+    Wire.setTimeOut(1); // from example
 
-    // Initialize the color sensor with a unique name and the I2C bus
-    rkColorSensorInit("front", Wire1, tcs);
+    rk_laser_init("back", Wire, lox1, PIN_XSHUT_1, 0x30);
+    rk_laser_init("front", Wire, lox2, PIN_XSHUT_2 , 0x31);
+    
+
+    
     
     printf("Starting main loop\n");
     //start tlacitko pro kalibraci klepet
 
     rkLedBlue(false);
     rkLedGreen(false);
-    rkLedYellow(false);
     rkLedRed(false);
     test_batery();
-    zavrit_klepeto();
-
-
-    // rkServosSetPosition(4, 90);//ven
-    // delay(5000);
-    // rkServosSetPosition(4, -43);//uvnitr
-
-    // rkServosSetPosition(1, -90);//natahnuti
-    // delay(5000);
-    // rkServosSetPosition(1, -55);
+    //zavrit_klepeto();
 }   
 
 enum RobotButton {
@@ -91,20 +95,18 @@ RobotButton getPressed() {
 }
 
 
+unsigned long previousMillis = 0;
+const long interval = 3000; // 3 seconds
+
 void setup() {
     configurating();
 }
 
 void loop() {
-    // Serial.print("PRAVY: "); Serial.println(rkIrLeft());// 1 je ten v pravo....
-    // Serial.print("LEVY: "); Serial.println(rkIrRight());// kdyz je to nizke tak cerna
-    // Serial.println();
-    // delay(100);
-
-
     rkLedBlue(false);
     rkLedGreen(false);
-    rkLedYellow(false);
+    rkLedRed(false);
+
     rkLedRed(false);
 
     switch(getPressed()) {
@@ -162,13 +164,10 @@ void loop() {
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
-            sprint_m_d();
-            // while(true){
-            //     delay(1000);
-            //     Serial.print("IR levý: "); Serial.println(rkIrRight());
-            //     Serial.print("IR pravý: "); Serial.println(rkIrLeft());
-
-            // }
+            //sprint_m_d();
+            otevrit_klepeto();
+            delay(10000);
+            zavrit_klepeto();            
 
             break;
             
@@ -179,10 +178,9 @@ void loop() {
 
             while(true){
                 delay(1000);
-
-                cervena();
-                
-
+                Serial.printf("Laser front: %d mm\n", rk_laser_measure("front"));
+                delay(100);
+                Serial.printf("Laser back: %d mm\n", rk_laser_measure("back"));
             }
         
             delay(1000);
