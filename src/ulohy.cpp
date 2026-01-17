@@ -1,10 +1,10 @@
 #include "robotka.h"
 #include "ulohy.h"
 
-int zadek_od_stredu = 105; // v mm (10.5 cm)
-int predek_od_stredu = 100; // v mm (10 cm)
+int zadek_od_stredu = 70; // v mm (7 cm)
+int predek_od_stredu = 75; // v mm (7.5 cm)
 int jedno_pole = 300; // v mm (30 cm)
-int od_steny_na_stred_pole = jedno_pole/2 - zadek_od_stredu; // 150 - 105 = 45 mm (4.5 cm)
+int od_steny_na_stred_pole = jedno_pole/2 - zadek_od_stredu; // 150 - 70 = 8cm
 
 
 
@@ -219,18 +219,18 @@ bool is_free_right() {
 }
 
 bool is_free_front() {
-    return rkUltraMeasure(1) > 200;
+    return rkUltraMeasure(3) > 200;
 }
 
 bool is_free_left() {
-    return rkUltraMeasure(4) > 200;
+    return rkUltraMeasure(2) > 200;
 }
 
 void sprint_m_d(){
     
     // Na začátku změříme vzdálenost k oběma stěnám
-    int first_distance_left = rkUltraMeasure(4);
-    int first_distance_right = rk_laser_measure("laser");
+    int first_distance_left = rkUltraMeasure(2);
+    int first_distance_right = rk_laser_measure("front");
 
     // Nastavení P-regulátoru a rychlosti
     const int base_speed = 60; // Základní rychlost
@@ -241,10 +241,10 @@ void sprint_m_d(){
 
 
     // Smyčka běží, dokud je před námi volno
-    while(rkUltraMeasure(1) > (od_steny_na_stred_pole + 20)){ // + 20 kvuli setrvacnosti
+    while(rkUltraMeasure(3) > (od_steny_na_stred_pole + 20)){ // + 20 kvuli setrvacnosti
         // Aktuální měření
-        int current_distance_left = rkUltraMeasure(4);
-        int current_distance_right = rk_laser_measure("laser");
+        int current_distance_left = rkUltraMeasure(2);
+        int current_distance_right = rk_laser_measure("front");
 
         if(current_distance_right < 200 && current_distance_right> 10 && (abs(current_distance_right - first_distance_right) < abs(current_distance_left - first_distance_left))){
             // Výpočet chyby
@@ -413,15 +413,15 @@ void slalom(bool right){
 void medved(){
     otevrit_klepeto();
     delay(100);
-    forward(420,70);
+    forward_acc(430,70);
     delay(100);
-    radius_right(70, 90, 50);
+    radius_right(90, 90, 40);
     delay(100);
-    forward(jedno_pole,70);
+    forward_acc(jedno_pole,70);
     delay(10);
-    srovnej_se_v_pravo();
+    srovnej_se_v_levo();
     delay(10);
-    back_buttons(od_steny_na_stred_pole);
+    back_buttons(50);
     delay(10);
     zavrit_klepeto();
     delay(10);
@@ -436,7 +436,7 @@ void medved(){
     turn_on_spot_left(90,50);
     delay(10);
     forward_acc(jedno_pole,70);
-    srovnej_se_v_pravo();
+    srovnej_se_v_levo();
     delay(10);
 }
 void kulicky(){

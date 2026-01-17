@@ -59,7 +59,7 @@ struct rkConfig {
         : prevod_motoru(1983.3f) // pro 12v ==  41.62486f * 48.f, pro 6v == 1981.3f
         , left_wheel_diameter(62) // v mm
         , right_wheel_diameter(61.5) // v mm
-        , roztec_kol(190.0) // v mm
+        , roztec_kol(165.0) // v mm
         , konstanta_radius_vnejsi_kolo(1.0f) // Korekční faktor pro vnější kolo při zatáčení
         , konstanta_radius_vnitrni_kolo(1.0f) // Korekční faktor pro vnitřní kolo při zatáčení
         , korekce_nedotacivosti_left(0.98f)// Korekce nedotáčivosti při otaceni na miste do leva

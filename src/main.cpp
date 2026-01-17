@@ -115,14 +115,14 @@ void loop() {
             // rkBuzzerSet(false);
             // delay(10000);
             // slalom(true); 
-            delay(10000);
-            bludiste();
-            srovnej_se_v_pravo();
-            turn_on_spot_left(90, 50);
-            delay(100);
-            back_buttons(40);
-            delay(100);
-            forward_acc(od_steny_na_stred_pole, 50);
+            // delay(10000);
+            // bludiste();
+            // srovnej_se_v_pravo();
+            // turn_on_spot_left(90, 50);
+            // delay(100);
+            // back_buttons(40);
+            // delay(100);
+            // forward_acc(od_steny_na_stred_pole, 50);
             delay(10000);
             medved();
             delay(10000);
@@ -159,10 +159,7 @@ void loop() {
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
-            //sprint_m_d();
-            zhod_kulicku();
-            delay(10000);
-            zavrit_klepeto();            
+            sprint_m_d();        
 
             break;
             
@@ -171,12 +168,8 @@ void loop() {
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
             delay(1000);
 
-            vysun_zhazovadlo();
-            delay(1000);
-
-        
-            delay(1000);
             
+            radius_right(90, 90, 50);
             
             break;
             
@@ -186,7 +179,7 @@ void loop() {
             rkLedBlue(true);
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
             delay(1000);
-            zasun_zhazovadlo();
+            //forward_acc(od_steny_na_stred_pole, 50);
             delay(100);
             break;
         
