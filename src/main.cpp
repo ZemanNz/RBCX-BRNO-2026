@@ -6,13 +6,11 @@
 
 byte Bbutton1 = 34;
 byte Bbutton2 = 35;
-byte PIN_XSHUT_1 = 27;
 byte PIN_XSHUT_2 = 25;
  
 
 
 // deklarace instance senzoru
-Adafruit_VL53L0X lox1 = Adafruit_VL53L0X();
 Adafruit_VL53L0X lox2 = Adafruit_VL53L0X();
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_1X);
 
@@ -34,7 +32,6 @@ void configurating(){
 
     // 1. HARD RESET VŠECH SENZORŮ
     // Všechny vypneme, aby nerušily I2C sběrnici
-    pinMode(PIN_XSHUT_1, OUTPUT); digitalWrite(PIN_XSHUT_1, LOW);
     pinMode(PIN_XSHUT_2, OUTPUT); digitalWrite(PIN_XSHUT_2, LOW);
     
     // Spust I2C sbernice
@@ -53,9 +50,7 @@ void configurating(){
     pinMode(TCS_SCL_pin, PULLUP);
     Wire.begin(TCS_SDA_pin, TCS_SCL_pin, 100000);
     Wire.setTimeOut(1); // from example
-
-    rk_laser_init("back", Wire, lox1, PIN_XSHUT_1, 0x30);
-    rk_laser_init("front", Wire, lox2, PIN_XSHUT_2 , 0x31);
+    rk_laser_init("front", Wire, lox2, PIN_XSHUT_2 , 0x29);
     
 
     
@@ -165,7 +160,7 @@ void loop() {
             rkLedRed(true); // Fialová pro sprint
             delay(1000);
             //sprint_m_d();
-            otevrit_klepeto();
+            zhod_kulicku();
             delay(10000);
             zavrit_klepeto();            
 
@@ -176,12 +171,9 @@ void loop() {
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
             delay(1000);
 
-            while(true){
-                delay(1000);
-                Serial.printf("Laser front: %d mm\n", rk_laser_measure("front"));
-                delay(100);
-                Serial.printf("Laser back: %d mm\n", rk_laser_measure("back"));
-            }
+            vysun_zhazovadlo();
+            delay(1000);
+
         
             delay(1000);
             
@@ -194,7 +186,8 @@ void loop() {
             rkLedBlue(true);
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
             delay(1000);
-            srovnej_na_caru();
+            zasun_zhazovadlo();
+            delay(100);
             break;
         
         case NONE:

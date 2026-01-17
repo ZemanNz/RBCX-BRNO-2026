@@ -1889,6 +1889,12 @@ void Motors::orient_to_wall(bool button_or_right, std::function<int()> first_sen
     int vzdalenost_first = distance_first;
     int vzdalenost_second = distance_second - o_kolik_je_dal_zadni;
 
+    Serial.print("first_vzdalenost_first: ");
+    Serial.println(vzdalenost_first);
+    Serial.print("first_vzdalenost_second: ");
+    Serial.println(vzdalenost_second);
+
+
     int start_error = vzdalenost_first - vzdalenost_second;
     
     if(button_or_right){
@@ -1941,14 +1947,21 @@ void Motors::orient_to_wall(bool button_or_right, std::function<int()> first_sen
 
     while(timeut_ms > millis() - start_time){
         distance_first = first_sensor();
+        delay(10);
         distance_second = second_sensor();
 
         int vzdalenost_first = distance_first;  
         int vzdalenost_second = distance_second - o_kolik_je_dal_zadni;
 
+        Serial.print("vzdalenost_first: ");
+        Serial.println(vzdalenost_first);
+        Serial.print("vzdalenost_second: ");
+        Serial.println(vzdalenost_second);
+
+
         int error = vzdalenost_first - vzdalenost_second;
 
-        if(abs(error) <= 5){ //nastavit
+        if(abs(error) <= 3){ //nastavit
             break;
         }
 
@@ -1965,7 +1978,7 @@ void Motors::orient_to_wall(bool button_or_right, std::function<int()> first_sen
             man.motor(m_id_right).speed(pctToSpeed(-speed_right));
         }
 
-        delay(30);
+        delay(1);
     }
     man.motor(m_id_left).speed(0);
     man.motor(m_id_right).speed(0);

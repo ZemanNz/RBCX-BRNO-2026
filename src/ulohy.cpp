@@ -17,32 +17,32 @@ void zavrit_klepeto(){
 }
 /// @brief ////////////////////////////////////////////////////////////////
 void vysun_zhazovadlo(){//musi byt blokujici ... ceka nez dosahne stupne....
-    rkServosSetPosition(2,-60);
+    rkServosSetPosition(4,-60);
     delay(200);
 }
 void zasun_zhazovadlo(){
-    rkServosSetPosition(2, 40);
+    rkServosSetPosition(4, 40);
     delay(200);
 }
 
 void packa_dolu_uplne(){
-    rkServosSetPosition(1, -50);
+    rkServosSetPosition(4, -50);
 }
 
 void packa_ven(){
-    rkServosSetPosition(2, 90);
+    rkServosSetPosition(3, 90);
 }
 
 void packa_dovnitr(){
-    rkServosSetPosition(2, 0);
+    rkServosSetPosition(3, 0);
 }
 
 void packa_nahoru(){
-    rkServosSetPosition(1, 70);
+    rkServosSetPosition(4, 70);
 }
 
 void packa_dolu(){
-    rkServosSetPosition(1, -20); // -50
+    rkServosSetPosition(4, -20); // -50
 }
 
 
@@ -50,26 +50,32 @@ void packa_dolu(){
 void zhod_kulicku(){
     zasun_zhazovadlo();
     delay(400);
-    rkServosSetPosition(1, 60);
-    delay(400);
+    rkServosSetPosition(3, 60);
+    delay(4000);
 
     int o =  20;
 
     for(int i = 0;i > -80 ; i-=5){
-        rkServosSetPosition(2, i);
-        if(i < -20){
-            rkServosSetPosition(1, o);
+        rkServosSetPosition(4, i);
+        if(i < -10){
+            rkServosSetPosition(3, o);
         }
         delay(50);
        o-= 3;
     }
-    rkServosSetPosition(1, -65);
+    rkServosSetPosition(3, -65);
 
     delay(500);
 
+    rkServosSetPosition(4, 0);
+    delay(500);
+    rkServosSetPosition(3, 0);
+    delay(500);
+
+
     zasun_zhazovadlo();
     delay(400);
-    rkServosSetPosition(1, 60);
+    rkServosSetPosition(3, 60);
     delay(400);
 }
 /// @brief /////////////////////////////////////////////////////////////////////
@@ -86,12 +92,12 @@ void srovnani(){
 
 void srovnej_se_v_pravo(){
     orient_to_wall(true, []() -> uint32_t { return rk_laser_measure("front"); },
-                             []() -> uint32_t { return rk_laser_measure("back"); }, -0);
+                             []() -> uint32_t { return rkUltraMeasure(4); },-20);
 }
 
 void srovnej_se_v_levo(){
-    orient_to_wall(false, []() -> uint32_t { return rkUltraMeasure(1); },
-                             []() -> uint32_t { return rkUltraMeasure(2); },0);
+    orient_to_wall(false, []() -> uint32_t { return rkUltraMeasure(2); },
+                             []() -> uint32_t { return rkUltraMeasure(1); },0);
 }   
 
 bool cervena(){
