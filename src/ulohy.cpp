@@ -223,8 +223,14 @@ bool is_free_front() {
 }
 
 bool is_free_left() {
-    return (rkUltraMeasure(2) > 200 || rkUltraMeasure(2) == 0);
+    int sum_ultra_measure = 0;
+    for (int i = 0; i < 3; i++) {
+        sum_ultra_measure += rkUltraMeasure(2);
+        delay(20); 
+    }
+    return ((sum_ultra_measure / 3) > 200 || (sum_ultra_measure / 3) == 0);
 }
+
 
 void sprint_m_d(){
     
@@ -510,8 +516,9 @@ void bludiste(){
         else if(is_free_left()){ // vlevo
             //srovnej_se_v_pravo();
             turn_on_spot_left(90, 50);
+            back_buttons(40);
             delay(100);
-            forward_acc(jedno_pole,40);
+            forward_acc(jedno_pole + od_steny_na_stred_pole,40);
             delay(100);             
         }
         else{
@@ -568,10 +575,11 @@ void bludiste(){
             delay(100);
         }
         else if(is_free_left()){ // vlevo
-            //srovnej_se_v_pravo();
+            srovnej_se_v_pravo();
             turn_on_spot_left(90, 50);
+            back_buttons(40);
             delay(100);
-            forward_acc(jedno_pole,40);
+            forward_acc(jedno_pole + od_steny_na_stred_pole,40);
             delay(100);             
         }
         else{
