@@ -51,7 +51,7 @@ void zhod_kulicku(){
     zasun_zhazovadlo();
     delay(400);
     rkServosSetPosition(3, 60);
-    delay(4000);
+    delay(400);
 
     int o =  20;
 
@@ -423,7 +423,7 @@ void medved(){
     delay(100);
     radius_right(90, 90, 40);
     delay(100);
-    forward_acc(jedno_pole,70);
+    forward_acc(jedno_pole + 100 ,70);
     delay(10);
     srovnej_se_v_levo();
     delay(10);
@@ -437,11 +437,13 @@ void medved(){
     delay(10);
     back_buttons(30);
     delay(10);
-    forward_acc(jedno_pole + od_steny_na_stred_pole, 70); // 345
+    forward_acc(jedno_pole + od_steny_na_stred_pole, 70);
     delay(10);
     turn_on_spot_left(90,50);
     delay(10);
-    forward_acc(jedno_pole,70);
+    back_buttons(30);
+    delay(10);
+    forward_acc(jedno_pole + od_steny_na_stred_pole, 70);
     srovnej_se_v_levo();
     delay(10);
 }
