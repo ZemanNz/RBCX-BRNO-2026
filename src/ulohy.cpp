@@ -51,7 +51,7 @@ void zhod_kulicku(){
     zasun_zhazovadlo();
     delay(400);
     rkServosSetPosition(3, 60);
-    delay(400);
+    delay(500);
 
     int o =  20;
 
