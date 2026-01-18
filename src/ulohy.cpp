@@ -211,19 +211,19 @@ void srovnej_na_caru() {
 // Assuming sensor 2 is for left
 
 bool is_double_free_right(){
-    return rk_laser_measure("front") > 500;
+    return (rk_laser_measure("front") > 500 || rk_laser_measure("front") == 0);
 }
 
 bool is_free_right() {
-    return rk_laser_measure("front") > 200;
+    return (rk_laser_measure("front") > 200 || rk_laser_measure("front") == 0);
 }
 
 bool is_free_front() {
-    return rkUltraMeasure(3) > 200;
+    return (rkUltraMeasure(3) > 200 || rkUltraMeasure(3) == 0);
 }
 
 bool is_free_left() {
-    return rkUltraMeasure(2) > 200;
+    return (rkUltraMeasure(2) > 200 || rkUltraMeasure(2) == 0);
 }
 
 void sprint_m_d(){
@@ -439,7 +439,7 @@ void medved(){
     srovnej_se_v_levo();
     delay(10);
 }
-void kulicky(){
+void kulicky(){//vevysce tak 6 cm
     zhod_kulicku();
     forward_acc(jedno_pole,50);
     zhod_kulicku();
@@ -463,10 +463,12 @@ void kulicky(){
 
 }
 void bludiste(){
+    byte a = 0;
     forward_acc(jedno_pole,40);
     for(int i=0; i< 5; i++){
-        if(is_double_free_right()){
+        if(is_double_free_right() && a < 1){
             i++;
+            a++;
             if(is_free_left()){
                 turn_on_spot_right(90, 50);
                 delay(100);
@@ -501,12 +503,12 @@ void bludiste(){
             }
         }
         else if(is_free_front()){// ve predu je volno
-            srovnej_se_v_pravo();
+            //srovnej_se_v_pravo();
             forward_acc(jedno_pole,40);
             delay(100);
         }
         else if(is_free_left()){ // vlevo
-            srovnej_se_v_pravo();
+            //srovnej_se_v_pravo();
             turn_on_spot_left(90, 50);
             delay(100);
             forward_acc(jedno_pole,40);
@@ -523,11 +525,9 @@ void bludiste(){
         delay(200);
     }
     while(!cervena()){ 
-        rkBuzzerSet(true);
-        delay(200);
-        rkBuzzerSet(false);
         delay(100);
-        if(is_double_free_right()){
+        if(is_double_free_right() && a < 1){
+            a++;
             if(is_free_left()){
                 turn_on_spot_right(90, 50);
                 delay(100);
@@ -563,12 +563,12 @@ void bludiste(){
             }
         }
         else if(is_free_front()){// ve predu je volno
-            srovnej_se_v_pravo();
+            //srovnej_se_v_pravo();
             forward_acc(jedno_pole,40);
             delay(100);
         }
         else if(is_free_left()){ // vlevo
-            srovnej_se_v_pravo();
+            //srovnej_se_v_pravo();
             turn_on_spot_left(90, 50);
             delay(100);
             forward_acc(jedno_pole,40);
@@ -584,6 +584,9 @@ void bludiste(){
         
         delay(200);
     }
+    rkBuzzerSet(true);
+    delay(200);
+    rkBuzzerSet(false);
 }
 
 

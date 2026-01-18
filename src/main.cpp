@@ -169,8 +169,11 @@ void loop() {
             delay(1000);
 
             
-            radius_right(90, 90, 50);
-            
+            while(true){
+                delay(1000);
+                Serial.print("UR: "); Serial.println(rkUltraMeasure(2));
+
+            }
             break;
             
         case BUTTON2_KOMBINACE2:
