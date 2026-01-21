@@ -52,9 +52,6 @@ void configurating(){
     Wire.setTimeOut(1); // from example
     rk_laser_init("front", Wire, lox2, PIN_XSHUT_2 , 0x29);
     
-
-    
-    
     printf("Starting main loop\n");
     //start tlacitko pro kalibraci klepet
 
@@ -90,8 +87,6 @@ RobotButton getPressed() {
     return NONE;
 }
 
-
-
 void setup() {
     configurating();
 }
@@ -105,26 +100,22 @@ void loop() {
     switch(getPressed()) {
         case UP_VYHREJ:
             rkLedGreen(true); // Zelená pro výhru
-            // delay(10000);
-            // // Kombinace úkolů pro "vyhrej"
-            // sprint_m_d(); 
-            // rkBuzzerSet(true);
-            // delay(200);
-            // rkBuzzerSet(false);
-            // delay(10000);
-            // slalom(true); 
-            // delay(10000);
-            // bludiste();
-            // srovnej_se_v_pravo();
-            // turn_on_spot_left(90, 50);
-            // delay(100);
-            // back_buttons(40);
-            // delay(100);
-            // forward_acc(od_steny_na_stred_pole, 50);
-            // delay(10000);
-            // medved();
-            // delay(10000);
-            // kulicky();
+            delay(10000);
+            sprint_m_d(); 
+            delay(10000);
+            slalom(true); 
+            delay(10000);
+            bludiste();
+            srovnej_se_v_pravo();
+            turn_on_spot_left(90, 50);
+            delay(100);
+            back_buttons(40);
+            delay(100);
+            forward_acc(od_steny_na_stred_pole, 50);
+            delay(10000);
+            medved();
+            delay(10000);
+            kulicky();
             break;
 
         case OFF_MEDVED:
@@ -135,20 +126,20 @@ void loop() {
 
         case DOWN_KULICKY:
             rkLedBlue(true); // Modrá pro kuličky
-            delay(1000);
+            delay(10000);
             kulicky();
             break;
             
         case RIGHT_BLUDISTE:
             rkLedYellow(true); // Žlutá pro bludiště
-            delay(1000);
+            delay(10000);
             bludiste();
             break;
             
         case LEFT_SLALOM:
             rkLedRed(true);
             rkLedYellow(true); // Oranžová pro slalom
-            delay(1000);
+            delay(10000);
             slalom(true);
             
             break;
@@ -156,7 +147,7 @@ void loop() {
         case ON_SPRINT:
             rkLedBlue(true);
             rkLedRed(true); // Fialová pro sprint
-            delay(1000);
+            delay(10000);
             sprint_m_d();        
 
             break;
@@ -164,9 +155,10 @@ void loop() {
         case BUTTON1_KOMBINACE1:
             rkLedGreen(true);
             rkLedYellow(true); // Zeleno-žlutá pro kombinaci 1
-            delay(1000);
-
-            
+            delay(10000);
+            medved();
+            delay(10000);
+            kulicky();
             break;
             
         case BUTTON2_KOMBINACE2:
@@ -174,10 +166,21 @@ void loop() {
             rkLedGreen(true);
             rkLedBlue(true);
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
-            delay(1000);
-            rkServosSetPosition(3, 90);
-            //forward_acc(od_steny_na_stred_pole, 50);
+            delay(10000);
+            slalom(true); 
+            delay(10000);
+            bludiste();
+            srovnej_se_v_pravo();
+            turn_on_spot_left(90, 50);
             delay(100);
+            back_buttons(40);
+            delay(100);
+            forward_acc(od_steny_na_stred_pole, 50);
+            delay(10000);
+            medved();
+            delay(10000);
+            kulicky();
+
             break;
         
         case NONE:
