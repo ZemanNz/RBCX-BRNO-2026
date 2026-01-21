@@ -353,7 +353,7 @@ void sprint_cara(){
 }
 void slalom(bool right){
     forward_acc(150,60);
-    turn_on_spot_right(50, 50);
+    turn_on_spot_right(50, 80);
     srovnej_na_caru();
     int a = 0;
     byte b= 0;
@@ -366,7 +366,7 @@ void slalom(bool right){
         Serial.print("LEVY: "); Serial.println(levy_senzor);
         Serial.println();
 
-        int zakladni_rychlost = 25; // Základní rychlost (%)
+        int zakladni_rychlost = 40; // Základní rychlost (%)
 
         int rychlost_levy_motor = map(levy_senzor, 0, 3800, 0, zakladni_rychlost);
         int rychlost_pravy_motor = map(pravy_senzor, 0, 3800, 0, zakladni_rychlost);
