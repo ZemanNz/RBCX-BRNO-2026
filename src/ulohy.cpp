@@ -57,11 +57,11 @@ void zhod_kulicku(){
 
     for(int i = 0;i > -80 ; i-=5){
         rkServosSetPosition(4, i);
-        if(i < -10){
+        if(i < -30){
             rkServosSetPosition(3, o);
         }
         delay(50);
-       o-= 3;
+       o-= 4;
     }
     rkServosSetPosition(3, -65);
 
@@ -317,7 +317,7 @@ void sprint_cara(){
         Serial.print("LEVY: "); Serial.println(levy_senzor);
         Serial.println();
 
-        int zakladni_rychlost = 45; // Základní rychlost (%)
+        int zakladni_rychlost =75; // Základní rychlost (%)
 
         int rychlost_levy_motor = map(levy_senzor, 0, 3800, 0, zakladni_rychlost);
         int rychlost_pravy_motor = map(pravy_senzor, 0, 3800, 0, zakladni_rychlost);
@@ -454,20 +454,15 @@ void kulicky(){//vevysce tak 6 cm
     forward_acc(jedno_pole,50);
     zhod_kulicku();
     backward(od_steny_na_stred_pole, 30);
-    turn_on_spot_left(90, 50);
-    srovnej_se_v_pravo();
+    turn_on_spot_left(180, 50);
     delay(100);
     back_buttons(od_steny_na_stred_pole);
-    forward_acc(od_steny_na_stred_pole,50);
-    turn_on_spot_left(90, 50);
-    delay(100);
-    back_buttons(od_steny_na_stred_pole);
-    delay(100);
     forward_acc(od_steny_na_stred_pole,50);
     turn_on_spot_right(90, 50);
     delay(100);
-
-    forward_acc(jedno_pole, 50);
+    back_buttons(50);
+    delay(100);
+    forward_acc(jedno_pole + od_steny_na_stred_pole, 50);
 
 }
 void bludiste(){

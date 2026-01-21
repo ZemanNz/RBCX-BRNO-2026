@@ -90,8 +90,6 @@ RobotButton getPressed() {
 }
 
 
-unsigned long previousMillis = 0;
-const long interval = 3000; // 3 seconds
 
 void setup() {
     configurating();
@@ -123,10 +121,10 @@ void loop() {
             // back_buttons(40);
             // delay(100);
             // forward_acc(od_steny_na_stred_pole, 50);
-            delay(10000);
-            medved();
-            delay(10000);
-            kulicky();
+            // delay(10000);
+            // medved();
+            // delay(10000);
+            // kulicky();
             break;
 
         case OFF_MEDVED:
@@ -169,11 +167,6 @@ void loop() {
             delay(1000);
 
             
-            while(true){
-                delay(1000);
-                Serial.print("UR: "); Serial.println(rkUltraMeasure(2));
-
-            }
             break;
             
         case BUTTON2_KOMBINACE2:
@@ -182,6 +175,7 @@ void loop() {
             rkLedBlue(true);
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
             delay(1000);
+            rkServosSetPosition(3, 90);
             //forward_acc(od_steny_na_stred_pole, 50);
             delay(100);
             break;
