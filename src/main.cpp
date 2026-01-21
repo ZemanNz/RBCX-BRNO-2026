@@ -60,6 +60,7 @@ void configurating(){
 
     rkLedBlue(false);
     rkLedGreen(false);
+    rkLedYellow(false);
     rkLedRed(false);
     test_batery();
     //zavrit_klepeto();
@@ -98,8 +99,7 @@ void setup() {
 void loop() {
     rkLedBlue(false);
     rkLedGreen(false);
-    rkLedRed(false);
-
+    rkLedYellow(false);
     rkLedRed(false);
 
     switch(getPressed()) {
