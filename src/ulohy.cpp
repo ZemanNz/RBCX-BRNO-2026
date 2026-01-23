@@ -455,8 +455,10 @@ void medved(){
     forward_acc(jedno_pole + od_steny_na_stred_pole, 70);
     delay(10);
 }
-void kulicky(){//vevysce tak 6 cm
+void kulicky(){//vevysce tak 5 cm
     zhod_kulicku();
+    delay(100);
+    srovnej_se_v_levo();
     forward_acc(jedno_pole,50);
     zhod_kulicku();
     forward_acc(jedno_pole,50);
