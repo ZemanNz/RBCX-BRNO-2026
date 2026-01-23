@@ -106,7 +106,6 @@ void loop() {
             slalom(true); 
             delay(10000);
             bludiste();
-            srovnej_se_v_pravo();
             turn_on_spot_left(90, 50);
             delay(100);
             back_buttons(40);
@@ -166,11 +165,10 @@ void loop() {
             rkLedGreen(true);
             rkLedBlue(true);
             rkLedYellow(true); // Bílá (všechny barvy) pro kombinaci 2
-            delay(10000);
-            slalom(true); 
+            // delay(10000);
+            // slalom(true); 
             delay(10000);
             bludiste();
-            srovnej_se_v_pravo();
             turn_on_spot_left(90, 50);
             delay(100);
             back_buttons(40);

@@ -211,15 +211,22 @@ void srovnej_na_caru() {
 // Assuming sensor 2 is for left
 
 bool is_double_free_right(){
-    return (rk_laser_measure("front") > 500 || rk_laser_measure("front") == 0);
+    int val = rk_laser_measure("front");
+    printf("Double free right: %d\n", val);
+    return (false);
 }
 
 bool is_free_right() {
-    return (rk_laser_measure("front") > 200 || rk_laser_measure("front") == 0);
+    int laser = rk_laser_measure("front");
+    uint32_t ultra = rkUltraMeasure(4);
+    printf("Free right - Laser: %d, Ultra: %u\n", laser, ultra);
+    return ((laser > 200 || laser == 0) && (ultra > 200 || ultra == 0));
 }
 
 bool is_free_front() {
-    return (rkUltraMeasure(3) > 200 || rkUltraMeasure(3) == 0);
+    uint32_t val = rkUltraMeasure(3);
+    printf("Free front: %u\n", val);
+    return (val > 200 || val == 0);
 }
 
 bool is_free_left() {
@@ -228,7 +235,9 @@ bool is_free_left() {
         sum_ultra_measure += rkUltraMeasure(2);
         delay(20); 
     }
-    return ((sum_ultra_measure / 3) > 200 || (sum_ultra_measure / 3) == 0);
+    int avg = sum_ultra_measure / 3;
+    printf("Free left avg: %d\n", avg);
+    return (avg > 200 || avg == 0);
 }
 
 
@@ -352,8 +361,8 @@ void sprint_cara(){
     turn_on_spot_left(90, 50);
 }
 void slalom(bool right){
-    forward_acc(150,60);
-    turn_on_spot_right(50, 80);
+    forward_acc(170,60);
+    turn_on_spot_right(40, 80);
     srovnej_na_caru();
     int a = 0;
     byte b= 0;
@@ -366,10 +375,10 @@ void slalom(bool right){
         Serial.print("LEVY: "); Serial.println(levy_senzor);
         Serial.println();
 
-        int zakladni_rychlost = 40; // Základní rychlost (%)
+        int zakladni_rychlost = 25; // Základní rychlost (%)
 
-        int rychlost_levy_motor = map(levy_senzor, 0, 3800, 0, zakladni_rychlost);
-        int rychlost_pravy_motor = map(pravy_senzor, 0, 3800, 0, zakladni_rychlost);
+        int rychlost_levy_motor = map(levy_senzor, 600, 3200, 0, zakladni_rychlost);
+        int rychlost_pravy_motor = map(pravy_senzor, 600, 3200, 0, zakladni_rychlost);
 
         rkMotorsSetSpeed(rychlost_levy_motor, rychlost_pravy_motor);
         delay(10); // Krátká pauza pro stabilizaci
@@ -444,7 +453,6 @@ void medved(){
     back_buttons(30);
     delay(10);
     forward_acc(jedno_pole + od_steny_na_stred_pole, 70);
-    srovnej_se_v_levo();
     delay(10);
 }
 void kulicky(){//vevysce tak 6 cm
@@ -593,5 +601,3 @@ void bludiste(){
     delay(200);
     rkBuzzerSet(false);
 }
-
-
